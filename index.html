@@ -7,6 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
     <!-- טעינת ספריית html2canvas לצורך הורדת הקולאז' כתמונה -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- טעינת מנוע היום של קלוד -->
+    <script src="daily-engine.js"></script>
     <style>
         :root {
             --bg-color: #e6e2d3;
@@ -181,7 +183,7 @@
         .collage-workspace {
             position: relative;
             width: 750px;
-            height: 3500px;
+            min-height: 2500px;
             overflow: hidden;
             background: transparent;
         }
@@ -334,7 +336,6 @@
 <body>
 
     <div class="site-container">
-        
         <header class="board-header">
             <h1>Trend Radar</h1>
             <div class="header-right-side">
@@ -344,7 +345,6 @@
         </header>
 
         <div class="main-layout">
-            
             <div class="downloadable-board-area" id="capture-container">
                 <div class="top-controls-wrapper" style="margin-bottom: 20px;">
                     <div class="control-group">
@@ -379,18 +379,16 @@
                 </div>
 
                 <div class="collage-workspace" id="collage-workspace">
-                    <!-- יופקו דינמית על ידי אלגוריתם ה-Seed היומי -->
+                    <!-- נטען אוטומטית על ידי DailyEngine -->
                 </div>
             </div>
 
             <div class="sidebar-side">
                 <div class="preview-panel">
                     <h4>Live Media Studio</h4>
-                    
                     <div class="embedded-player-container" id="player-box">
                         <div class="default-player-placeholder">Click any item or live video card to inspect in-site</div>
                     </div>
-
                     <div id="preview-title">Select an item</div>
                     <p id="preview-desc">Color inspiration, hex codes, and live media previews will appear here instantly.</p>
                 </div>
@@ -415,71 +413,74 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
         <footer class="footer">
             Trend Radar &bull; Live Mood Board Edition
         </footer>
-
     </div>
 
-    <script src="daily-engine.js"></script>
     <script>
-        // מאגר פרויקטים וסרטונים עדכניים מעולמות העיצוב (2026) מובנה ישירות למניעת שגיאות טעינה
-        const masterPool = [
-            { layer: 'top', badge: 'Vogue Cover', title: 'Vogue Editorial Direction 2026', sub: 'Magazine Cover', type: 'image', source: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/5qap5aO4i9A', styleClass: 'card-magazine-clean has-washi-tape', magazineName: 'VOGUE', height: 280, left: 20, top: 20, rot: -1 },
-            { layer: 'top', badge: 'Forbes Cover', title: 'Forbes Design & AI Innovation', sub: 'Magazine Cover', type: 'image', source: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/L_LUpnjgPso', styleClass: 'card-magazine-clean has-washi-tape tape-olive', magazineName: 'FORBES', height: 260, left: 390, top: 180, rot: 1.2 },
-            { layer: 'top', badge: 'TikTok', title: 'Spatial Computing & AR UI Trends', sub: 'Viral 24h Peak', type: 'video', source: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/kJQP7kiw5Fk', styleClass: 'card-tiktok-style card-large', overlayText: '🎵 Spatial UI #arfilter', height: 200, left: 20, top: 480, rot: -0.5 },
-            { layer: 'top', badge: 'YouTube', title: 'Future of UI/UX: Design Systems 2026', sub: 'Keynote Lecture', type: 'video', source: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/9bZkp7q19f0', styleClass: 'card-tiktok-style card-large has-washi-tape tape-paper', overlayText: '▶ Watch Keynote 2026', height: 210, left: 390, top: 620, rot: 1.1 },
-            { layer: 'top', badge: 'Pinterest', title: 'Editorial Branding Curations 2026', sub: 'Pinterest Trend', type: 'image', source: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/5qap5aO4i9A', styleClass: 'card-pinterest-style', height: 180, left: 20, top: 920, rot: -0.8 },
-            { layer: 'top', badge: 'Pinterest', title: 'Minimalist Spatial Architecture', sub: 'Visual Discovery', type: 'image', source: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/L_LUpnjgPso', styleClass: 'card-pinterest-style has-washi-tape tape-paper', height: 160, left: 390, top: 1040, rot: 1.5 },
-            { layer: 'top', badge: 'Pinterest', title: 'Warm Organic Typography Systems', sub: 'Color Mood', type: 'image', source: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/kJQP7kiw5Fk', styleClass: 'card-pinterest-style has-washi-tape', height: 150, left: 20, top: 1350, rot: -0.9 },
-            { layer: 'top', badge: 'New Music', title: 'Midnight Echoes Vinyl LP (2026 Mix)', sub: 'Single Release', type: 'vinyl', source: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/9bZkp7q19f0', styleClass: 'card-vinyl-standalone', height: 170, left: 390, top: 1420, rot: -2 },
-            { layer: 'top', badge: 'New Music', title: 'Ambient Design Flow Session', sub: 'Album Drop', type: 'vinyl', source: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/5qap5aO4i9A', styleClass: 'card-vinyl-standalone', height: 170, left: 20, top: 1820, rot: 1.5 },
-            { layer: 'top', badge: 'Behance', title: 'Interactive AI Tools Showcase', sub: 'Featured on Behance', type: 'image', source: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/L_LUpnjgPso', styleClass: 'card-instagram-style has-washi-tape', igUser: 'behance.design', height: 170, left: 390, top: 1820, rot: -1.2 },
-            { layer: 'top', badge: 'Dribbble', title: 'Next-Gen Mobile App Concept', sub: 'Popular on Dribbble', type: 'image', source: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/kJQP7kiw5Fk', styleClass: 'card-instagram-style', igUser: 'dribbble.shot', height: 150, left: 20, top: 2220, rot: 0.8 },
-            { layer: 'top', badge: 'TikTok', title: 'Micro-Interactions & Motion Design', sub: 'Trending Tech', type: 'video', source: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/9bZkp7q19f0', styleClass: 'card-tiktok-style has-washi-tape', overlayText: '🔥 #uimotion #figma', height: 170, left: 390, top: 2220, rot: 0.7 },
-            { layer: 'background', badge: 'Zine Print', title: 'Handmade Editorial Typography', sub: 'Print Zine', type: 'image', source: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/5qap5aO4i9A', styleClass: 'card-torn-edge has-washi-tape', height: 140, left: 20, top: 2620, rot: 1.4 },
-            { layer: 'background', badge: 'Paper Cut', title: 'Raw Editorial Cutouts & Collage', sub: 'Print Layout', type: 'image', source: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/L_LUpnjgPso', styleClass: 'card-torn-edge card-folded-corner', height: 130, left: 390, top: 2600, rot: -1.5 },
-            { layer: 'background', badge: 'Dribbble', title: '3D Spatial Interfaces Concept', sub: 'Dribbble Trending', type: 'image', source: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/kJQP7kiw5Fk', styleClass: 'card-torn-edge has-washi-tape tape-olive', height: 140, left: 20, top: 3000, rot: 0.9 },
-            { layer: 'background', badge: 'Behance', title: 'Neo-Brutalist Visual Identity', sub: 'Behance Curated', type: 'image', source: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/9bZkp7q19f0', styleClass: 'card-folded-corner has-washi-tape', height: 130, left: 390, top: 2980, rot: 1.2 }
+        // מגזינים, תקליטים ותכנים מדויקים ואמיתיים לכל קטגוריה
+        const fallbackContent = [
+            { layer: 'top', badge: 'Vogue Cover', title: 'Vogue Editorial September Issue', sub: 'Magazine Cover', type: 'image', source: 'https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&w=600&q=80', styleClass: 'card-magazine-clean has-washi-tape', magazineName: 'VOGUE', height: 280 },
+            { layer: 'top', badge: 'Forbes Cover', title: 'Forbes Business & Tech Leaders', sub: 'Magazine Cover', type: 'image', source: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80', styleClass: 'card-magazine-clean has-washi-tape tape-olive', magazineName: 'FORBES', height: 260 },
+            { layer: 'top', badge: 'TikTok', title: 'Spatial Computing & AR UI Trends', sub: 'Viral 24h Peak', type: 'video', source: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80', styleClass: 'card-tiktok-style card-large', overlayText: '🎵 Spatial UI #arfilter', height: 200 },
+            { layer: 'top', badge: 'YouTube', title: 'Future of UI/UX: Design Systems 2026', sub: 'Keynote Lecture', type: 'video', source: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80', styleClass: 'card-tiktok-style card-large has-washi-tape tape-paper', overlayText: '▶ Watch Keynote 2026', height: 210 },
+            { layer: 'top', badge: 'Pinterest', title: 'Editorial Branding Curations 2026', sub: 'Pinterest Trend', type: 'image', source: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=600&q=80', styleClass: 'card-pinterest-style', height: 180 },
+            { layer: 'top', badge: 'Pinterest', title: 'Minimalist Spatial Architecture', sub: 'Visual Discovery', type: 'image', source: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80', styleClass: 'card-pinterest-style has-washi-tape tape-paper', height: 160 },
+            { layer: 'top', badge: 'Pinterest', title: 'Warm Organic Typography Systems', sub: 'Color Mood', type: 'image', source: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=600&q=80', styleClass: 'card-pinterest-style has-washi-tape', height: 150 },
+            { layer: 'top', badge: 'New Music', title: 'Midnight Echoes Vinyl LP Release', sub: 'Music Album Art', type: 'vinyl', source: 'https://images.unsplash.com/photo-1539375665275-f9de415ef9ac?auto=format&fit=crop&w=600&q=80', styleClass: 'card-vinyl-standalone', height: 170 },
+            { layer: 'top', badge: 'New Music', title: 'Ambient Design Flow Soundscape', sub: 'Vinyl Record', type: 'vinyl', source: 'https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&w=600&q=80', styleClass: 'card-vinyl-standalone', height: 170 },
+            { layer: 'top', badge: 'Behance', title: 'Interactive AI Tools Showcase', sub: 'Featured on Behance', type: 'image', source: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80', styleClass: 'card-instagram-style has-washi-tape', igUser: 'behance.design', height: 170 },
+            { layer: 'top', badge: 'Dribbble', title: 'Next-Gen Mobile App Concept', sub: 'Popular on Dribbble', type: 'image', source: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80', styleClass: 'card-instagram-style', igUser: 'dribbble.shot', height: 150 },
+            { layer: 'top', badge: 'TikTok', title: 'Micro-Interactions & Motion Design', sub: 'Trending Tech', type: 'video', source: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80', styleClass: 'card-tiktok-style has-washi-tape', overlayText: '🔥 #uimotion #figma', height: 170 },
+            { layer: 'background', badge: 'Zine Print', title: 'Handmade Editorial Typography', sub: 'Print Zine', type: 'image', source: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80', styleClass: 'card-torn-edge has-washi-tape', height: 140 },
+            { layer: 'background', badge: 'Paper Cut', title: 'Raw Editorial Cutouts & Collage', sub: 'Print Layout', type: 'image', source: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=600&q=80', styleClass: 'card-torn-edge card-folded-corner', height: 130 },
+            { layer: 'background', badge: 'Dribbble', title: '3D Spatial Interfaces Concept', sub: 'Dribbble Trending', type: 'image', source: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80', styleClass: 'card-torn-edge has-washi-tape tape-olive', height: 140 },
+            { layer: 'background', badge: 'Behance', title: 'Neo-Brutalist Visual Identity', sub: 'Behance Curated', type: 'image', source: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80', styleClass: 'card-folded-corner has-washi-tape', height: 130 }
+        ];
+
+        const fallbackVideos = [
+            { id: '5qap5aO4i9A', platform: 'youtube', title: 'Ambient Design Flow' },
+            { id: 'L_LUpnjgPso', platform: 'youtube', title: 'Midnight Echoes' },
+            { id: 'kJQP7kiw5Fk', platform: 'youtube', title: 'Spatial UI Motion' },
+            { id: '9bZkp7q19f0', platform: 'youtube', title: 'Design Systems Keynote' }
         ];
 
         const floatingLabels = [
-            { text: '⚡ TIKTOK & YOUTUBE 2026', colorClass: '', top: 450, left: 200, rot: -2 },
-            { text: '✦ VOGUE, FORBES & PINTEREST', colorClass: 'terracotta-bg', top: 150, left: 220, rot: 1.5 },
-            { text: '📌 DESIGN TRENDS 2026', colorClass: 'yellow-bg', top: 1280, left: 240, rot: -1 }
+            { text: '⚡ TIKTOK & YOUTUBE 2026', colorClass: '', rot: -2 },
+            { text: '✦ VOGUE, FORBES & PINTEREST', colorClass: 'terracotta-bg', rot: 1.5 },
+            { text: '📌 DESIGN TRENDS 2026', colorClass: 'yellow-bg', rot: -1 }
         ];
 
-        // ───────── מנוע יומי (הלוגיקה כולה ב-daily-engine.js) ─────────
-        // מאגר חירום בלבד (אם video-pool.json לא קיים/לא נטען). כדי שהסרטונים לא יחזרו - הריצו update_site.py.
-        const fallbackVideos = ['5qap5aO4i9A', 'L_LUpnjgPso', 'kJQP7kiw5Fk', '9bZkp7q19f0'].map(id => ({ id }));
+        async function initBoard() {
+            const params = new URLSearchParams(window.location.search);
+            const dateParam = params.get('date');
 
-        async function buildArtisticCollage() {
-            const workspace = document.getElementById('collage-workspace');
-            // ‎?date=2026-10-01 בכתובת = תצוגה מקדימה של כל יום (לבדיקות)
-            const dateOpts = { date: new URLSearchParams(location.search).get('date') };
-
-            const data = await DailyEngine.load({
-                ...dateOpts,
-                contentUrl: 'trends-data.json',
-                videoUrl: 'video-pool.json',
-                fallbackContent: masterPool,
-                fallbackVideos
+            const rawData = await DailyEngine.load({
+                date: dateParam,
+                fallbackContent: fallbackContent,
+                fallbackVideos: fallbackVideos,
+                count: 16
             });
-            const day = DailyEngine.compose(data, { ...dateOpts, count: 16, width: 750, labels: floatingLabels });
 
-            workspace.innerHTML = ""; // ניקוי אזור העבודה
-            workspace.style.height = day.height + 'px'; // במובייל ה-CSS דורס עם !important
+            const board = DailyEngine.compose(rawData, {
+                date: dateParam,
+                count: 16,
+                width: 750,
+                labels: floatingLabels
+            });
 
             const options = { month: 'short', day: 'numeric', year: 'numeric' };
-            document.getElementById('live-date').innerText =
-                new Date(day.dateKey + 'T12:00:00').toLocaleDateString('en-US', options);
+            const boardDate = new Date(board.dateKey + 'T00:00:00');
+            document.getElementById('live-date').innerText = boardDate.toLocaleDateString('en-US', options);
 
-            const todayItems = day.items;
+            const workspace = document.getElementById('collage-workspace');
+            workspace.innerHTML = "";
+            workspace.style.height = board.height + 'px';
 
-            todayItems.forEach((item) => {
+            board.items.forEach((item) => {
                 const card = document.createElement('div');
                 const layerClass = item.layer === 'top' ? 'layer-top' : 'layer-background';
                 card.className = `collage-card ${item.styleClass} ${layerClass}`;
@@ -488,8 +489,9 @@
                 card.style.left = `${item.pos.left}px`;
                 card.style.transform = `rotate(${item.pos.rot}deg)`;
 
+                const activeVideo = item.videoUrl || 'https://www.youtube.com/embed/5qap5aO4i9A';
                 card.onclick = () => {
-                    inspectItem(item.title, item.sub, item.videoUrl);
+                    inspectItem(item.title, item.sub || 'Trend Item', activeVideo);
                 };
 
                 let visualContent = '';
@@ -497,7 +499,7 @@
 
                 if (item.magazineName) {
                     extraHeader = `<div class="magazine-masthead">${item.magazineName}</div>`;
-                } else if (item.styleClass.includes('card-instagram-style') && item.igUser) {
+                } else if (item.styleClass && item.styleClass.includes('card-instagram-style') && item.igUser) {
                     extraHeader = `
                         <div class="ig-header">
                             <div class="ig-avatar"></div>
@@ -508,9 +510,9 @@
 
                 if (item.type === 'video') {
                     visualContent = `
-                        <div class="visual-box" style="height: ${item.height}px;">
+                        <div class="visual-box" style="height: ${item.height || 160}px;">
                             <span class="badge-title">${item.badge}</span>
-                            <iframe src="${item.videoUrl}" allow="autoplay" loading="lazy"></iframe>
+                            <iframe src="${activeVideo}" allow="autoplay"></iframe>
                             ${item.overlayText ? `<div class="tiktok-overlay-tags">${item.overlayText}</div>` : ''}
                         </div>
                     `;
@@ -522,7 +524,7 @@
                     `;
                 } else {
                     visualContent = `
-                        <div class="visual-box" style="height: ${item.height}px; background-image: url('${item.source}');">
+                        <div class="visual-box" style="height: ${item.height || 160}px; background-image: url('${item.source}');">
                             <span class="badge-title">${item.badge}</span>
                         </div>
                     `;
@@ -545,9 +547,9 @@
                 workspace.appendChild(card);
             });
 
-            day.labels.forEach(label => {
+            board.labels.forEach(label => {
                 const tag = document.createElement('div');
-                tag.className = `floating-label-tag ${label.colorClass}`;
+                tag.className = `floating-label-tag ${label.colorClass || ''}`;
                 tag.style.top = `${label.top}px`;
                 tag.style.left = `${label.left}px`;
                 tag.style.transform = `rotate(${label.rot}deg)`;
@@ -578,7 +580,7 @@
             }
         }
 
-        document.addEventListener("DOMContentLoaded", buildArtisticCollage);
+        document.addEventListener("DOMContentLoaded", initBoard);
     </script>
 </body>
 </html>
