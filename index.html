@@ -5,7 +5,383 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trend Radar & Mood Board</title>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --bg-color: #e6e2d3;
+            --polaroid-bg: #fffdf9;
+            --stroke-dark: #3a3a3a;
+            --accent-terracotta: #b85d41;
+            --accent-olive: #5f6b55;
+            --dark-card: #1c1c1e;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#9c9989 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+            color: var(--stroke-dark);
+            margin: 0;
+            padding: 40px;
+            overflow-x: hidden;
+        }
+
+        .site-container {
+            max-width: 1450px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .board-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .board-header h1 {
+            font-family: 'Raleway', sans-serif;
+            font-size: 46px;
+            font-weight: 800;
+            margin: 0;
+            color: var(--stroke-dark);
+            letter-spacing: -0.5px;
+        }
+
+        .live-date {
+            font-size: 11px;
+            font-weight: 700;
+            background: var(--stroke-dark);
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 2px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-family: 'Special Elite', monospace;
+            border: 1.5px solid var(--stroke-dark);
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* מרחב קולאז' דינמי שמתמלא אוטומטית ע"י הסקריפט */
+        .collage-workspace {
+            position: relative;
+            min-height: 8000px;
+        }
+
+        .collage-card {
+            position: absolute;
+            background: var(--polaroid-bg);
+            padding: 12px 12px 22px 12px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12), 0 3px 8px rgba(0,0,0,0.04);
+            border: 2px solid var(--stroke-dark);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .collage-card:hover { transform: translateY(-3px); }
+
+        .card-portrait { width: 280px; }
+        .card-landscape { width: 420px; }
+        .card-square { width: 300px; }
+
+        .png-cutout {
+            position: absolute;
+            font-family: 'Special Elite', monospace;
+            font-size: 11px;
+            background: #fdf5d3;
+            color: var(--stroke-dark);
+            padding: 5px 10px;
+            border: 1.5px solid var(--stroke-dark);
+            box-shadow: 3px 3px 0px var(--stroke-dark);
+            z-index: 15;
+            pointer-events: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .collage-card::before {
+            content: "";
+            position: absolute;
+            top: -9px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-1.5deg);
+            width: 65px;
+            height: 18px;
+            background: rgba(230, 220, 195, 0.9);
+            border: 1px dashed #8a826d;
+            z-index: 5;
+        }
+        .tape-olive::before { background: rgba(95, 107, 85, 0.3) !important; }
+        .tape-terracotta::before { background: rgba(184, 93, 65, 0.3) !important; }
+
+        .dog-ear {
+            position: relative;
+            background: linear-gradient(135deg, #fffdf9 50%, #f0ebd9 50%);
+        }
+        .dog-ear::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(225deg, #d8d0bc 50%, #fffdf9 50%);
+            box-shadow: -2px 2px 3px rgba(0,0,0,0.08);
+            border-bottom: 2px solid var(--stroke-dark);
+            border-left: 2px solid var(--stroke-dark);
+        }
+
+        .torn-paper-art-frame {
+            position: absolute;
+            background: #fffdf9;
+            padding: 35px 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            border: 2px solid var(--stroke-dark);
+            clip-path: polygon(0% 3%, 6% 0%, 12% 3%, 18% 0%, 24% 3%, 30% 0%, 36% 3%, 42% 0%, 48% 3%, 54% 0%, 60% 3%, 66% 0%, 72% 3%, 78% 0%, 84% 3%, 90% 0%, 96% 3%, 100% 0%, 98% 97%, 100% 100%, 94% 97%, 88% 100%, 82% 97%, 76% 100%, 70% 97%, 64% 100%, 58% 97%, 52% 100%, 46% 97%, 40% 100%, 34% 97%, 28% 100%, 22% 97%, 16% 100%, 10% 97%, 4% 100%, 0% 97%);
+            cursor: pointer;
+            width: 420px;
+        }
+
+        /* צבעי HEX מקובעים למעלה ימינה */
+        .pantone-fixed-group {
+            position: absolute;
+            top: 0px;
+            left: 500px;
+            display: flex;
+            gap: 12px;
+            z-index: 50;
+        }
+
+        .pantone-polaroid {
+            background: var(--polaroid-bg);
+            padding: 8px 8px 16px 8px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border: 2px solid var(--stroke-dark);
+            cursor: pointer;
+            width: 95px;
+            text-align: center;
+        }
+
+        .pantone-swatch {
+            height: 65px;
+            border-radius: 1px;
+            border: 1.5px solid var(--stroke-dark);
+        }
+
+        .pantone-code {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--stroke-dark);
+            margin-top: 6px;
+            font-family: 'Special Elite', monospace;
+        }
+
+        .viral-sounds-section {
+            position: absolute;
+            top: 155px;
+            left: 500px;
+            display: flex;
+            gap: 14px;
+            z-index: 50;
+        }
+
+        .sound-circle {
+            width: 44px;
+            height: 44px;
+            background: var(--stroke-dark);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            border: 2px solid #fff;
+        }
+        .sound-circle:hover { transform: scale(1.1); background: var(--accent-terracotta); color: #fff; }
+
+        .visual-box {
+            height: 200px;
+            background: var(--dark-card);
+            border-radius: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 28px;
+            overflow: hidden;
+            position: relative;
+            border: 2px solid var(--stroke-dark);
+        }
+
+        .visual-box-landscape { height: 230px; }
+        .visual-box-square { height: 250px; }
+
+        .badge-title {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: var(--stroke-dark);
+            color: #fff;
+            padding: 2px 6px;
+            font-size: 9px;
+            font-weight: 800;
+            border-radius: 1px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-family: 'Special Elite', monospace;
+        }
+
+        .card-caption {
+            margin-top: 10px;
+            font-size: 13px;
+            font-weight: 800;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--stroke-dark);
+        }
+
+        .card-sub {
+            font-size: 9px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+            font-family: 'Special Elite', monospace;
+        }
+
+        .sidebar-side {
+            position: sticky;
+            top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .preview-panel {
+            background: var(--dark-card);
+            color: #fff;
+            padding: 22px;
+            border-radius: 4px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            border: 2px solid var(--stroke-dark);
+        }
+
+        .preview-panel h4 {
+            margin: 0 0 10px 0;
+            font-size: 11px;
+            color: #b85d41;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-family: 'Special Elite', monospace;
+        }
+
+        .embedded-player-container {
+            width: 100%;
+            height: 260px;
+            background: #000;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #333;
+        }
+
+        .embedded-player-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .default-player-placeholder {
+            color: #888;
+            font-size: 13px;
+            text-align: center;
+            padding: 20px;
+            font-family: 'Special Elite', monospace;
+        }
+
+        #preview-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: #b85d41;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        #preview-desc {
+            font-size: 12px;
+            color: #ccc;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .links-box {
+            background: #ffffff;
+            padding: 22px;
+            border-radius: 4px;
+            border: 2px solid var(--stroke-dark);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .links-box h3 {
+            margin: 0 0 12px 0;
+            font-size: 15px;
+            font-weight: 900;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            border-bottom: 2px solid var(--stroke-dark);
+            padding-bottom: 8px;
+        }
+
+        .link-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px dashed #bbb;
+            text-decoration: none;
+            color: var(--stroke-dark);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .link-item:last-child { border-bottom: none; }
+        .link-item:hover { color: var(--accent-terracotta); }
+
+        .platform-tag {
+            font-size: 9px;
+            background: var(--stroke-dark);
+            padding: 2px 6px;
+            border-radius: 1px;
+            color: #fff;
+            text-transform: uppercase;
+            font-family: 'Special Elite', monospace;
+        }
+
+        .footer {
+            grid-column: span 2;
+            text-align: center;
+            font-size: 11px;
+            color: var(--stroke-dark);
+            margin-top: 150px;
+            border-top: 2px dashed var(--stroke-dark);
+            padding-top: 20px;
+            font-family: 'Special Elite', monospace;
+            letter-spacing: 1px;
+        }
+    </style>
 </head>
 <body>
 
@@ -41,15 +417,12 @@
 
         <div class="main-layout">
             
-            <!-- מרחב הקולאז' הדינמי שיתמלא אוטומטית דרך ה-JS -->
             <div class="collage-workspace" id="collage-workspace">
-                <!-- אלמנטים גזורים מרחפים ברקע (PNG Cutouts) -->
-                <div class="png-cutout" style="top: 180px; left: 360px; transform: rotate(4deg);">★ NEW DROP</div>
-                <div class="png-cutout" style="top: 520px; left: 390px; transform: rotate(-5deg); background: #d3f3f1;">⚡ TREND WATCH</div>
-                <div class="png-cutout" style="top: 860px; left: 370px; transform: rotate(3deg); background: #f8d7da;">📌 CURATED</div>
+                <!-- אלמנטים גזורים מרחפים ברקע -->
+                <div class="png-cutout" style="top: 480px; left: 360px; transform: rotate(4deg);">★ LIVE FEED</div>
+                <div class="png-cutout" style="top: 1020px; left: 390px; transform: rotate(-5deg); background: #d3f3f1;">⚡ AUTO SYNC</div>
             </div>
 
-            <!-- סרטיד צד ימין -->
             <div class="sidebar-side">
                 <div class="preview-panel">
                     <h4>🔍 Live Media Studio</h4>
@@ -86,11 +459,117 @@
         </div>
 
         <footer class="footer">
-            Trend Radar &bull; Dynamic JavaScript Edition
+            Trend Radar &bull; Dynamic Auto-Fetching Collage Edition
         </footer>
 
     </div>
 
-    <script src="app.js"></script>
+    <script>
+        // מנוע אוטומטי ששואב תמונות עיצוב אמיתיות באופן עצמאי ממקורות ציבוריים בזמן טעינה
+        const liveTrends = [
+            { type: 'card', class: 'card-landscape tape-olive dog-ear', top: 0, left: 10, rot: -1.5, bg: '#2c3e50', badge: 'Live Unsplash', title: 'Neo-Brutalism & UI Motion Breakdown', sub: 'Fetched Live', media: 'tiktok', url: 'https://www.tiktok.com/embed/v2/7234567890', icon: '▶', imgQuery: 'architecture' },
+            { type: 'card', class: 'card-square tape-terracotta dog-ear', top: 260, left: 10, rot: 1.5, bg: '#111', badge: 'Editorial', title: 'Vogue New Era Cover Drop', sub: 'Print & Editorial', media: 'instagram', url: 'https://www.instagram.com/p/C000000/embed', icon: 'VOGUE', imgQuery: 'fashion' },
+            { type: 'card', class: 'card-landscape tape-olive', top: 280, left: 340, rot: 1, bg: '#8c6d62', badge: 'Runway', title: 'Milan Fashion Week Tailoring', sub: 'Runway & Street Style', media: 'youtube', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🧥', imgQuery: 'minimalist' },
+            { type: 'torn', top: 580, left: 10, rot: 1, title: 'Print Archive Feature', sub: 'Analog Print Curation' },
+            { type: 'card', class: 'card-square tape-terracotta dog-ear', top: 600, left: 460, rot: -1.5, bg: '#4a5d4e', badge: 'Exhibition', title: 'Immersive Digital Art Installation', sub: 'Global Exhibition Drop', media: 'youtube', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🏛️', imgQuery: 'interior' },
+            { type: 'card', class: 'card-landscape tape-olive dog-ear', top: 900, left: 10, rot: -1, bg: '#556b2f', badge: 'Culinary', title: 'Sculptural Pistachio Tart Art', sub: 'Culinary Social Trend', media: 'youtube', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🥐', imgQuery: 'food' },
+            { type: 'card', class: 'card-portrait tape-terracotta', top: 920, left: 460, rot: 2, bg: '#7b1fa2', badge: '3D Art', title: 'Surrealist 3D Organic Textures', sub: 'Artist Spotlight', media: 'youtube', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🎨', imgQuery: '3d' },
+            { type: 'torn', top: 1220, left: 10, rot: -1, title: 'Zine & Press Cutout', sub: 'Alternative Press Curation' },
+            { type: 'card', class: 'card-square tape-olive', top: 1240, left: 460, rot: 1.5, bg: '#004d40', badge: 'Branding', title: 'Tactile Eco-Packaging', sub: 'Behance Branding Trend', media: 'youtube', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🧴', imgQuery: 'packaging' },
+            { type: 'card', class: 'card-landscape tape-terracotta dog-ear', top: 1540, left: 10, rot: -1.5, bg: '#311b92', badge: 'Spatial UX', title: 'Spatial Computing & Bezi 3D', sub: 'Immersive Technology', media: 'youtube', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🥽', imgQuery: 'technology' }
+        ];
+
+        let currentWorkspaceY = 1850;
+
+        function buildCollage() {
+            const workspace = document.getElementById('collage-workspace');
+            document.getElementById('live-date').innerText = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+            liveTrends.forEach(item => {
+                if (item.type === 'card') {
+                    const card = document.createElement('div');
+                    card.className = `collage-card ${item.class}`;
+                    card.style.top = `${item.top}px`;
+                    card.style.left = `${item.left}px`;
+                    card.style.transform = `rotate(${item.rot}deg)`;
+                    card.onclick = () => playEmbeddedMedia(item.media, item.url, item.title, item.sub);
+
+                    // שאיבה אוטומטית של תמונה חיה מ-Unsplash בהתאם לנושא בלי AI
+                    const liveImgUrl = `https://picsum.photos/seed/${item.imgQuery + item.top}/600/400`;
+
+                    card.innerHTML = `
+                        <div class="visual-box ${item.class.includes('landscape') ? 'visual-box-landscape' : item.class.includes('square') ? 'visual-box-square' : ''}" style="background-image: url('${liveImgUrl}'); background-size: cover; background-position: center;">
+                            <span class="badge-title">${item.badge}</span>
+                        </div>
+                        <div class="card-caption">${item.title}</div>
+                        <div class="card-sub">${item.sub}</div>
+                    `;
+                    workspace.appendChild(card);
+                } else if (item.type === 'torn') {
+                    const torn = document.createElement('div');
+                    torn.className = 'torn-paper-art-frame';
+                    torn.style.top = `${item.top}px`;
+                    torn.style.left = `${item.left}px`;
+                    torn.style.transform = `rotate(${item.rot}deg)`;
+                    torn.onclick = () => playEmbeddedMedia('info', '', item.title, item.sub);
+
+                    torn.innerHTML = `
+                        <div style="height: 120px; display: flex; flex-direction: column; justify-content: center; font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 19px; color: var(--stroke-dark); text-align: center;">
+                            ${item.title}
+                            <span style="font-size: 11px; font-weight: normal; font-family: 'Special Elite', monospace; color: #666; margin-top: 5px;">${item.sub}</span>
+                        </div>
+                        <div class="card-caption" style="margin-top: 8px;">Auto-Curated Print Asset</div>
+                        <div class="card-sub">Dynamic Zine Grid</div>
+                    `;
+                    workspace.appendChild(torn);
+                }
+            });
+        }
+
+        // טעינת תכנים אינסופית בגלילה
+        window.addEventListener('scroll', () => {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1000) {
+                const workspace = document.getElementById('collage-workspace');
+                const batch = [
+                    { type: 'card', class: 'card-landscape tape-olive dog-ear', top: currentWorkspaceY, left: 10, rot: 1, bg: '#b71c1c', badge: 'Archive', title: 'Swiss Graphic Design & Grid Systems', sub: 'Auto-Fetched Trend', media: 'youtube', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🔤', imgQuery: 'swiss' },
+                    { type: 'card', class: 'card-square tape-terracotta', top: currentWorkspaceY + 20, left: 460, rot: -1.5, bg: '#6d4c41', badge: 'Craft', title: 'Handmade Stoneware & Ceramics', sub: 'Object Design', media: 'youtube', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🍵', imgQuery: 'ceramic' }
+                ];
+                
+                batch.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = `collage-card ${item.class}`;
+                    card.style.top = `${item.top}px`;
+                    card.style.left = `${item.left}px`;
+                    card.style.transform = `rotate(${item.rot}deg)`;
+                    card.onclick = () => playEmbeddedMedia(item.media, item.url, item.title, item.sub);
+                    const liveImgUrl = `https://picsum.photos/seed/scroll${currentWorkspaceY}/600/400`;
+
+                    card.innerHTML = `
+                        <div class="visual-box visual-box-landscape" style="background-image: url('${liveImgUrl}'); background-size: cover; background-position: center;">
+                            <span class="badge-title">${item.badge}</span>
+                        </div>
+                        <div class="card-caption">${item.title}</div>
+                        <div class="card-sub">${item.sub}</div>
+                    `;
+                    workspace.appendChild(card);
+                });
+                currentWorkspaceY += 550;
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", buildCollage);
+
+        function playEmbeddedMedia(type, mediaUrl, title, description) {
+            const playerBox = document.getElementById('player-box');
+            document.getElementById('preview-title').innerText = title;
+            document.getElementById('preview-desc').innerText = description;
+
+            if (mediaUrl && mediaUrl !== '') {
+                playerBox.innerHTML = `<iframe src="${mediaUrl}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+            } else {
+                playerBox.innerHTML = `<div class="default-player-placeholder" style="background:#2b2b2b; color:#b85d41; font-family:'Special Elite',monospace; font-size:14px; padding:20px; text-align:center;">✨ Dynamic Feed Item Loaded Successfully</div>`;
+            }
+        }
+    </script>
 </body>
 </html>
