@@ -5,14 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trend Radar & Mood Board</title>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+    <!-- טעינת ספריית html2canvas לצורך הורדת הקולאז' כתמונה -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --bg-color: #e6e2d3;
             --polaroid-bg: #fffdf9;
+            --stroke-light: #8c857b;
             --stroke-dark: #3a3a3a;
             --accent-terracotta: #b85d41;
             --accent-olive: #5f6b55;
-            --dark-card: #1c1c1e;
+            --warm-panel-bg: #d9d2be;
         }
 
         body {
@@ -22,12 +25,12 @@
             background-size: 24px 24px;
             color: var(--stroke-dark);
             margin: 0;
-            padding: 40px;
+            padding: 30px;
             overflow-x: hidden;
         }
 
         .site-container {
-            max-width: 1450px;
+            max-width: 1480px;
             margin: 0 auto;
             position: relative;
         }
@@ -35,224 +38,406 @@
         .board-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
+            align-items: flex-start;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .board-header h1 {
             font-family: 'Raleway', sans-serif;
-            font-size: 46px;
+            font-size: 44px;
             font-weight: 800;
             margin: 0;
             color: var(--stroke-dark);
             letter-spacing: -0.5px;
         }
 
-        .live-date {
-            font-size: 11px;
-            font-weight: 700;
-            background: var(--stroke-dark);
-            color: #fff;
-            padding: 6px 16px;
-            border-radius: 2px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            font-family: 'Special Elite', monospace;
-            border: 1.5px solid var(--stroke-dark);
+        .header-right-side {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
         }
+
+        .live-date {
+            font-family: 'Raleway', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--stroke-dark);
+            letter-spacing: -0.3px;
+            margin: 0;
+        }
+
+        .download-btn {
+            background: var(--accent-terracotta);
+            color: #fff;
+            border: 2px solid var(--stroke-dark);
+            padding: 8px 16px;
+            font-family: 'Special Elite', monospace;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 3px 3px 0px rgba(58, 58, 58, 0.9);
+            transition: transform 0.1s, background 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .download-btn:hover {
+            background: #9d4c33;
+            transform: translateY(-1px);
+        }
+
+        .top-controls-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 15px 22px;
+            border: 2px solid var(--stroke-light);
+            box-shadow: 4px 4px 0px rgba(140, 133, 123, 0.3);
+        }
+
+        .control-group h3 {
+            margin: 0 0 10px 0;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-family: 'Special Elite', monospace;
+            color: var(--stroke-dark);
+            border-bottom: 1.5px dashed var(--stroke-light);
+            padding-bottom: 4px;
+        }
+
+        .pantone-fixed-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .pantone-polaroid {
+            background: var(--polaroid-bg);
+            padding: 6px 6px 12px 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border: 2px solid var(--stroke-light);
+            cursor: pointer;
+            width: 80px;
+            text-align: center;
+        }
+
+        .pantone-swatch {
+            height: 48px;
+            border-radius: 1px;
+            border: 1.5px solid var(--stroke-light);
+        }
+
+        .pantone-code {
+            font-size: 9px;
+            font-weight: 800;
+            color: var(--stroke-dark);
+            margin-top: 4px;
+            font-family: 'Special Elite', monospace;
+        }
+
+        .viral-sounds-section {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .sound-pill {
+            background: var(--polaroid-bg);
+            color: var(--stroke-dark);
+            padding: 7px 14px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-family: 'Special Elite', monospace;
+            cursor: pointer;
+            border: 2px solid var(--stroke-light);
+            transition: background 0.2s;
+        }
+        .sound-pill:hover { background: var(--accent-terracotta); color: #fff; }
 
         .main-layout {
             display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 40px;
+            grid-template-columns: 1fr 380px;
+            gap: 30px;
             align-items: start;
         }
 
+        .downloadable-board-area {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#9c9989 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* אזור קולאז' תחום בשני השלישים השמאליים בלבד */
         .collage-workspace {
             position: relative;
-            min-height: 8500px;
+            width: 750px;
+            height: 3500px;
+            overflow: hidden;
+            background: transparent;
         }
 
         .collage-card {
             position: absolute;
             background: var(--polaroid-bg);
-            padding: 12px 12px 22px 12px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.12), 0 3px 8px rgba(0,0,0,0.04);
-            border: 2px solid var(--stroke-dark);
+            padding: 10px 10px 14px 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border: 2px solid var(--stroke-light);
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: none !important;
+            width: 250px;
         }
-        .collage-card:hover { transform: translateY(-3px); }
 
-        .card-portrait { width: 280px; }
-        .card-landscape { width: 420px; }
-        .card-square { width: 300px; }
+        /* מערכת שכבות: שכבה עליונה לפריטים חשובים ושכבה תחתונה לתמונות השראה */
+        .layer-top {
+            z-index: 30 !important;
+        }
+        .layer-background {
+            z-index: 10 !important;
+            opacity: 0.92;
+        }
 
-        .png-cutout {
+        .card-magazine-clean {
+            background: #f4efe6;
+            border: 1.5px solid var(--stroke-light) !important;
+            box-shadow: 4px 8px 22px rgba(0,0,0,0.12);
+            width: 240px !important;
+        }
+
+        .floating-label-tag {
             position: absolute;
+            background: #b5e3db;
+            border: 2px solid var(--stroke-dark);
+            padding: 4px 10px;
             font-family: 'Special Elite', monospace;
-            font-size: 11px;
-            background: #fdf5d3;
+            font-size: 9px;
+            font-weight: bold;
             color: var(--stroke-dark);
-            padding: 5px 10px;
-            border: 1.5px solid var(--stroke-dark);
-            box-shadow: 3px 3px 0px var(--stroke-dark);
-            z-index: 15;
+            box-shadow: 2px 2px 0px rgba(58, 58, 58, 0.8);
+            z-index: 50;
             pointer-events: none;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            white-space: nowrap;
         }
+        .floating-label-tag.terracotta-bg { background: #e8a896; }
+        .floating-label-tag.yellow-bg { background: #f2e399; }
 
-        .collage-card::before {
-            content: "";
-            position: absolute;
-            top: -9px;
-            left: 50%;
-            transform: translateX(-50%) rotate(-1.5deg);
-            width: 65px;
-            height: 18px;
-            background: rgba(230, 220, 195, 0.9);
-            border: 1px dashed #8a826d;
-            z-index: 5;
-        }
-        .tape-olive::before { background: rgba(95, 107, 85, 0.3) !important; }
-        .tape-terracotta::before { background: rgba(184, 93, 65, 0.3) !important; }
-
-        .dog-ear {
+        .card-folded-corner {
             position: relative;
-            background: linear-gradient(135deg, #fffdf9 50%, #f0ebd9 50%);
+            overflow: hidden;
         }
-        .dog-ear::after {
+        .card-folded-corner::after {
             content: "";
             position: absolute;
             top: 0;
             right: 0;
-            width: 25px;
-            height: 25px;
-            background: linear-gradient(225deg, #d8d0bc 50%, #fffdf9 50%);
-            box-shadow: -2px 2px 3px rgba(0,0,0,0.08);
-            border-bottom: 2px solid var(--stroke-dark);
-            border-left: 2px solid var(--stroke-dark);
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(225deg, #b8b0a2 50%, #e6e2d3 50%);
+            box-shadow: -2px 2px 4px rgba(0,0,0,0.15);
+            border-bottom-left-radius: 4px;
         }
 
-        .torn-paper-art-frame {
-            position: absolute;
+        .card-torn-edge {
+            border: 2px solid var(--stroke-light);
             background: #fffdf9;
-            padding: 35px 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-            border: 2px solid var(--stroke-dark);
-            clip-path: polygon(0% 3%, 6% 0%, 12% 3%, 18% 0%, 24% 3%, 30% 0%, 36% 3%, 42% 0%, 48% 3%, 54% 0%, 60% 3%, 66% 0%, 72% 3%, 78% 0%, 84% 3%, 90% 0%, 96% 3%, 100% 0%, 98% 97%, 100% 100%, 94% 97%, 88% 100%, 82% 97%, 76% 100%, 70% 97%, 64% 100%, 58% 97%, 52% 100%, 46% 97%, 40% 100%, 34% 97%, 28% 100%, 22% 97%, 16% 100%, 10% 97%, 4% 100%, 0% 97%);
-            cursor: pointer;
-            width: 420px;
+            position: relative;
         }
-
-        .pantone-fixed-group {
+        .card-torn-edge::before {
+            content: "";
             position: absolute;
-            top: 0px;
-            left: 500px;
-            display: flex;
-            gap: 12px;
-            z-index: 50;
+            top: -6px;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background-image: radial-gradient(circle, transparent 40%, #fffdf9 40%);
+            background-size: 8px 8px;
         }
 
-        .pantone-polaroid {
-            background: var(--polaroid-bg);
-            padding: 8px 8px 16px 8px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            border: 2px solid var(--stroke-dark);
-            cursor: pointer;
-            width: 95px;
+        .has-washi-tape::before {
+            content: "";
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-1.5deg);
+            width: 55px;
+            height: 14px;
+            background: rgba(184, 93, 65, 0.45);
+            border: 1px dashed rgba(255,255,255,0.6);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 20;
+        }
+        .has-washi-tape.tape-olive::before { background: rgba(95, 107, 85, 0.45); }
+        .has-washi-tape.tape-paper::before { background: rgba(220, 213, 195, 0.7); border: 1px dashed #9c9989; }
+
+        .magazine-masthead {
+            font-family: 'Raleway', sans-serif;
+            font-size: 15px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
             text-align: center;
-        }
-
-        .pantone-swatch {
-            height: 65px;
-            border-radius: 1px;
-            border: 1.5px solid var(--stroke-dark);
-        }
-
-        .pantone-code {
-            font-size: 10px;
-            font-weight: 800;
+            margin-bottom: 5px;
             color: var(--stroke-dark);
-            margin-top: 6px;
-            font-family: 'Special Elite', monospace;
+            border-bottom: 2px solid var(--stroke-dark);
+            padding-bottom: 3px;
         }
 
-        .viral-sounds-section {
-            position: absolute;
-            top: 155px;
-            left: 500px;
-            display: flex;
-            gap: 14px;
-            z-index: 50;
+        .card-vinyl-standalone {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            text-align: center;
+            width: 190px !important;
         }
-
-        .sound-circle {
-            width: 44px;
-            height: 44px;
-            background: var(--stroke-dark);
-            color: #fff;
+        .vinyl-full-disc {
+            position: relative;
             border-radius: 50%;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 6px auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-            cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
-            border: 2px solid #fff;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+            border: 3px solid #111;
+            background-size: cover;
+            background-position: center;
         }
-        .sound-circle:hover { transform: scale(1.1); background: var(--accent-terracotta); color: #fff; }
+        .vinyl-center-hole {
+            width: 24px;
+            height: 24px;
+            background: #111;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
+        }
+        .card-vinyl-standalone .card-caption {
+            color: var(--stroke-dark);
+            font-size: 10px;
+            background: var(--polaroid-bg);
+            padding: 2px 6px;
+            border: 1.5px solid var(--stroke-light);
+            display: inline-block;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+        }
+
+        .card-instagram-style {
+            background: #faf8f5;
+            border: 2px solid var(--stroke-dark);
+        }
+        .ig-header {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 4px;
+            font-size: 8px;
+            font-weight: bold;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .ig-avatar {
+            width: 12px;
+            height: 12px;
+            background: var(--accent-terracotta);
+            border-radius: 50%;
+        }
+
+        .card-tiktok-style {
+            background: #111;
+            color: #fff;
+            border: 2px solid #333;
+        }
+        .card-tiktok-style .card-caption { color: #fff; }
+        .card-tiktok-style .card-sub { color: #aaa; }
+        .tiktok-overlay-tags {
+            position: absolute;
+            bottom: 6px;
+            left: 6px;
+            right: 6px;
+            font-size: 7px;
+            color: #fff;
+            font-family: 'Special Elite', monospace;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+            z-index: 10;
+        }
+
+        .card-pinterest-style {
+            background: #fffdf9;
+            border: 2px solid var(--stroke-light);
+            border-radius: 10px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .card-pinterest-style .visual-box {
+            border-radius: 6px 6px 0 0;
+            border: none;
+            border-bottom: 1.5px solid var(--stroke-light);
+        }
 
         .visual-box {
-            height: 200px;
-            background: var(--dark-card);
+            background: var(--warm-panel-bg);
             border-radius: 1px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #fff;
-            font-size: 28px;
+            color: var(--stroke-dark);
             overflow: hidden;
             position: relative;
-            border: 2px solid var(--stroke-dark);
+            border: 1.5px solid var(--stroke-light);
             background-size: cover;
             background-position: center;
         }
 
-        .visual-box-landscape { height: 230px; }
-        .visual-box-square { height: 250px; }
+        .visual-box iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            pointer-events: none;
+        }
 
         .badge-title {
             position: absolute;
-            top: 8px;
-            left: 8px;
-            background: var(--stroke-dark);
+            top: 3px;
+            left: 3px;
+            background: var(--stroke-light);
             color: #fff;
-            padding: 2px 6px;
-            font-size: 9px;
+            padding: 2px 4px;
+            font-size: 6px;
             font-weight: 800;
             border-radius: 1px;
             letter-spacing: 1px;
             text-transform: uppercase;
             font-family: 'Special Elite', monospace;
+            z-index: 10;
         }
 
         .card-caption {
-            margin-top: 10px;
-            font-size: 13px;
+            margin-top: 5px;
+            font-size: 9px;
             font-weight: 800;
             font-family: 'Plus Jakarta Sans', sans-serif;
             color: var(--stroke-dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .card-sub {
-            font-size: 9px;
+            font-size: 6px;
             color: #666;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-top: 2px;
+            margin-top: 1px;
             font-family: 'Special Elite', monospace;
         }
 
@@ -266,18 +451,18 @@
         }
 
         .preview-panel {
-            background: var(--dark-card);
-            color: #fff;
-            padding: 22px;
+            background: var(--warm-panel-bg);
+            color: var(--stroke-dark);
+            padding: 20px;
             border-radius: 4px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-            border: 2px solid var(--stroke-dark);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            border: 2px solid var(--stroke-light);
         }
 
         .preview-panel h4 {
-            margin: 0 0 10px 0;
+            margin: 0 0 8px 0;
             font-size: 11px;
-            color: #b85d41;
+            color: var(--accent-terracotta);
             text-transform: uppercase;
             letter-spacing: 1.5px;
             font-family: 'Special Elite', monospace;
@@ -285,16 +470,16 @@
 
         .embedded-player-container {
             width: 100%;
-            height: 260px;
-            background: #000;
+            height: 230px;
+            background: #fffdf9;
             border-radius: 2px;
             overflow: hidden;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px solid #333;
+            border: 1.5px solid var(--stroke-light);
         }
 
         .embedded-player-container iframe {
@@ -304,15 +489,15 @@
         }
 
         .default-player-placeholder {
-            color: #888;
-            font-size: 13px;
+            color: var(--stroke-light);
+            font-size: 12px;
             text-align: center;
-            padding: 20px;
+            padding: 15px;
             font-family: 'Special Elite', monospace;
         }
 
         #preview-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             margin-bottom: 4px;
             color: var(--accent-terracotta);
@@ -320,50 +505,49 @@
         }
 
         #preview-desc {
-            font-size: 12px;
-            color: #ccc;
+            font-size: 11px;
+            color: #555;
             margin: 0;
             line-height: 1.4;
         }
 
         .links-box {
             background: #ffffff;
-            padding: 22px;
+            padding: 20px;
             border-radius: 4px;
-            border: 2px solid var(--stroke-dark);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid var(--stroke-light);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
         }
 
         .links-box h3 {
-            margin: 0 0 12px 0;
-            font-size: 15px;
+            margin: 0 0 10px 0;
+            font-size: 14px;
             font-weight: 900;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            border-bottom: 2px solid var(--stroke-dark);
-            padding-bottom: 8px;
+            border-bottom: 2px solid var(--stroke-light);
+            padding-bottom: 6px;
         }
 
         .link-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px dashed #bbb;
+            padding: 7px 0;
+            border-bottom: 1px dashed #ccc;
             text-decoration: none;
             color: var(--stroke-dark);
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             cursor: pointer;
             transition: color 0.2s;
         }
-
         .link-item:last-child { border-bottom: none; }
         .link-item:hover { color: var(--accent-terracotta); }
 
         .platform-tag {
-            font-size: 9px;
-            background: var(--stroke-dark);
-            padding: 2px 6px;
+            font-size: 8px;
+            background: var(--stroke-light);
+            padding: 2px 5px;
             border-radius: 1px;
             color: #fff;
             text-transform: uppercase;
@@ -375,11 +559,34 @@
             text-align: center;
             font-size: 11px;
             color: var(--stroke-dark);
-            margin-top: 150px;
-            border-top: 2px dashed var(--stroke-dark);
-            padding-top: 20px;
+            margin-top: 30px;
+            border-top: 2px dashed var(--stroke-light);
+            padding-top: 15px;
             font-family: 'Special Elite', monospace;
             letter-spacing: 1px;
+        }
+
+        @media (max-width: 1024px) {
+            body { padding: 15px; }
+            .main-layout { grid-template-columns: 1fr; }
+            .sidebar-side { position: static; margin-top: 20px; }
+            .top-controls-wrapper { grid-template-columns: 1fr; gap: 15px; }
+        }
+
+        @media (max-width: 768px) {
+            .board-header h1 { font-size: 32px; }
+            .live-date { font-size: 18px; }
+            .collage-workspace { width: 100% !important; min-height: 4200px; }
+            .collage-card {
+                position: relative !important;
+                left: 0 !important;
+                top: auto !important;
+                margin-bottom: 20px;
+                width: 100% !important;
+                max-width: 300px;
+                transform: none !important;
+            }
+            .floating-label-tag { display: none; }
         }
     </style>
 </head>
@@ -389,67 +596,80 @@
         
         <header class="board-header">
             <h1>Trend Radar</h1>
-            <div class="live-date" id="live-date">Updated Today</div>
+            <div class="header-right-side">
+                <div class="live-date" id="live-date">Sep 21, 2026</div>
+                <button class="download-btn" onclick="downloadMoodBoard()">Download Mood Board</button>
+            </div>
         </header>
-
-        <!-- פולרוידי צבעי HEX חמים מקובעים למעלה ימינה -->
-        <div class="pantone-fixed-group">
-            <div class="pantone-polaroid" style="transform: rotate(-1deg);" onclick="playEmbeddedMedia('info', '', 'Warm Terracotta: #B85D41', 'Primary organic autumn tone.')">
-                <div class="pantone-swatch" style="background-color: #b85d41;"></div>
-                <div class="pantone-code">#B85D41</div>
-            </div>
-            <div class="pantone-polaroid" style="transform: rotate(2deg);" onclick="playEmbeddedMedia('info', '', 'Soft Blush: #E3AAB1', 'Gentle secondary pastel tone.')">
-                <div class="pantone-swatch" style="background-color: #e3aab1;"></div>
-                <div class="pantone-code">#E3AAB1</div>
-            </div>
-            <div class="pantone-polaroid" style="transform: rotate(-2deg);" onclick="playEmbeddedMedia('info', '', 'Warm Olive Sage: #5F6B55', 'Earthy botanical tone.')">
-                <div class="pantone-swatch" style="background-color: #5f6b55;"></div>
-                <div class="pantone-code">#5F6B55</div>
-            </div>
-        </div>
-
-        <!-- אזור סאונדים -->
-        <div class="viral-sounds-section">
-            <div class="sound-circle" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Viral Audio: Ambient Design Flow', 'Top trending sound.')" title="Play Sound 1">🔊</div>
-            <div class="sound-circle" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'New Track: Midnight Echoes Remix', 'Underground track.')" title="Play Sound 2">🎵</div>
-            <div class="sound-circle" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Audio Trend: Spatial UX Podcast', 'Podcast audio.')" title="Play Sound 3">🎙️</div>
-        </div>
 
         <div class="main-layout">
             
-            <div class="collage-workspace" id="collage-workspace">
-                <div class="png-cutout" style="top: 480px; left: 360px; transform: rotate(4deg);">★ PINTEREST & BEHANCE SYNC</div>
-                <div class="png-cutout" style="top: 1020px; left: 390px; transform: rotate(-5deg); background: #d3f3f1;">⚡ TIKTOK VIRAL FEED</div>
+            <div class="downloadable-board-area" id="capture-container">
+                <div class="top-controls-wrapper" style="margin-bottom: 20px;">
+                    <div class="control-group">
+                        <h3>SEASON COLOR PALETTE</h3>
+                        <div class="pantone-fixed-group">
+                            <div class="pantone-polaroid" style="transform: rotate(-2deg);" onclick="inspectItem('Warm Terracotta: #B85D41', 'Primary organic autumn tone.', '')">
+                                <div class="pantone-swatch" style="background-color: #b85d41;"></div>
+                                <div class="pantone-code">#B85D41</div>
+                            </div>
+                            <div class="pantone-polaroid" style="transform: rotate(1.5deg);" onclick="inspectItem('Soft Blush: #E3AAB1', 'Gentle secondary pastel tone.', '')">
+                                <div class="pantone-swatch" style="background-color: #e3aab1;"></div>
+                                <div class="pantone-code">#E3AAB1</div>
+                            </div>
+                            <div class="pantone-polaroid" style="transform: rotate(-1deg);" onclick="inspectItem('Warm Olive Sage: #5F6B55', 'Earthy botanical tone.', '')">
+                                <div class="pantone-swatch" style="background-color: #5f6b55;"></div>
+                                <div class="pantone-code">#5F6B55</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <h3>VIRAL SOUNDS & AUDIO TRENDS</h3>
+                        <div class="viral-sounds-section">
+                            <div class="sound-pill" onclick="inspectItem('Viral Audio: Ambient Design Flow', 'Top trending sound across creative reels.', 'https://www.youtube.com/embed/dQw4w9WgXcQ')">
+                                <span>Ambient Design Flow</span>
+                            </div>
+                            <div class="sound-pill" onclick="inspectItem('Midnight Echoes Remix', 'Underground track surging on TikTok.', 'https://www.youtube.com/embed/dQw4w9WgXcQ')">
+                                <span>Midnight Echoes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collage-workspace" id="collage-workspace">
+                    <!-- יופקו דינמית לפי שכבות ומלאי מדויק -->
+                </div>
             </div>
 
             <div class="sidebar-side">
                 <div class="preview-panel">
-                    <h4>🔍 Live Media Studio</h4>
+                    <h4>Live Media Studio</h4>
                     
                     <div class="embedded-player-container" id="player-box">
-                        <div class="default-player-placeholder">Click any item or color swatch to inspect in-site</div>
+                        <div class="default-player-placeholder">Click any item or live video card to inspect in-site</div>
                     </div>
 
                     <div id="preview-title">Select an item</div>
-                    <p id="preview-desc">Color inspiration, hex codes, and media previews will appear here instantly.</p>
+                    <p id="preview-desc">Color inspiration, hex codes, and live media previews will appear here instantly.</p>
                 </div>
 
                 <div class="links-box">
-                    <h3>🔗 Inspiration Channels</h3>
-                    <div class="link-item" onclick="playEmbeddedMedia('tiktok', 'https://www.tiktok.com/embed/v2/7234567890', 'TikTok 24h Peak Trends', 'Live feed of top creative prototype videos.')">
+                    <h3>Inspiration Channels</h3>
+                    <div class="link-item" onclick="inspectItem('TikTok 24h Peak Trends', 'Live feed of top creative prototype videos.', 'https://www.tiktok.com/embed/v2/7234567890')">
                         <span>Going Viral (TikTok 24h)</span>
                         <span class="platform-tag">TikTok</span>
                     </div>
-                    <div class="link-item" onclick="playEmbeddedMedia('instagram', 'https://www.instagram.com/p/C000000/embed', 'Instagram Hot Reels', 'Latest curated editorial reels.')">
-                        <span>Hot Reels & Magazine Covers</span>
+                    <div class="link-item" onclick="inspectItem('Instagram Hot Reels', 'Latest curated editorial reels.', 'https://www.instagram.com/p/C000000/embed')">
+                        <span>Hot Reels & Covers</span>
                         <span class="platform-tag">Instagram</span>
                     </div>
-                    <div class="link-item" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Pinterest & Fashion Week Stream', 'Immersive video highlights.')">
-                        <span>Fashion Week & Pinterest Trends</span>
+                    <div class="link-item" onclick="inspectItem('Pinterest Fashion Stream', 'Immersive runway highlights.', 'https://www.youtube.com/embed/dQw4w9WgXcQ')">
+                        <span>Pinterest Trends</span>
                         <span class="platform-tag">Pinterest</span>
                     </div>
-                    <div class="link-item" onclick="playEmbeddedMedia('behance', 'https://www.behance.net', 'Behance Exhibitions & Print', 'Showcase of physical print archives.')">
-                        <span>Exhibitions & Print Design</span>
+                    <div class="link-item" onclick="inspectItem('Behance Exhibitions', 'Showcase of physical print archives.', 'https://www.behance.net')">
+                        <span>Exhibitions & Print</span>
                         <span class="platform-tag">Behance</span>
                     </div>
                 </div>
@@ -458,117 +678,161 @@
         </div>
 
         <footer class="footer">
-            Trend Radar &bull; Cross-Platform Social & Design Feed
+            Trend Radar &bull; Live Mood Board Edition
         </footer>
 
     </div>
 
     <script>
-        // רשימת טרנדים אמיתיים שמקושרים ישירות לפלטפורמות המובילות (Pinterest, Behance, Dribbble, TikTok)
-        const platformTrends = [
-            { type: 'card', class: 'card-landscape tape-olive dog-ear', top: 0, left: 10, rot: -1.5, badge: 'Pinterest Viral', title: 'Aesthetic Mood Board & Editorial People', sub: 'Pinterest Trend Surge', platform: 'pinterest', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '📌' },
-            { type: 'card', class: 'card-square tape-terracotta dog-ear', top: 260, left: 10, rot: 1.5, badge: 'Behance Top', title: 'Brand Identity & Human-Centric UI Design', sub: 'Behance Curated', platform: 'behance', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🎨' },
-            { type: 'card', class: 'card-landscape tape-olive', top: 280, left: 340, rot: 1, badge: 'Dribbble Shot', title: 'Interactive 3D Motion & Spatial Portfolios', sub: 'Dribbble Popular', platform: 'dribbble', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🏀' },
-            { type: 'torn', top: 580, left: 10, rot: 1, title: 'Cross-Platform Trend Archive', sub: 'Social & Design Sync' },
-            { type: 'card', class: 'card-square tape-terracotta dog-ear', top: 600, left: 460, rot: -1.5, badge: 'TikTok Trend', title: 'Neo-Brutalism & UI Motion Breakdown', sub: 'TikTok 24h Peak', platform: 'tiktok', url: 'https://www.tiktok.com/embed/v2/7234567890', icon: '▶' },
-            { type: 'card', class: 'card-landscape tape-olive dog-ear', top: 900, left: 10, rot: -1, badge: 'Pinterest Art', title: 'Portraiture & Expressionism Aesthetics', sub: 'Top Saved Pins', platform: 'pinterest', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '📌' },
-            { type: 'card', class: 'card-portrait tape-terracotta', top: 920, left: 460, rot: 2, badge: 'Behance 3D', title: 'Surrealist 3D People & Organic Textures', sub: 'Featured Project', platform: 'behance', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '✨' },
-            { type: 'torn', top: 1220, left: 10, rot: -1, title: 'Zine & Social Press Cutout', sub: 'Alternative Press Curation' },
-            { type: 'card', class: 'card-square tape-olive', top: 1240, left: 460, rot: 1.5, badge: 'Dribbble UI', title: 'Minimalist Complex System Dashboards', sub: 'Trending Shot', platform: 'dribbble', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '💻' },
-            { type: 'card', class: 'card-landscape tape-terracotta dog-ear', top: 1540, left: 10, rot: -1.5, badge: 'Instagram Reels', title: 'Backstage Fashion Week & Human Stories', sub: 'Viral IG Reel', platform: 'instagram', url: 'https://www.instagram.com/p/C000000/embed', icon: '📸' }
+        // רשימת מלאי עם הגדרת שכבות (layer-top לעליונה, layer-background לתחתונה)
+        const inventoryTrends = [
+            // --- שכבה עליונה (פריטים ראשיים: סרטונים, מגזינים, תקליטים, אינסטגרם, פינטרסט) ---
+            { layer: 'top', badge: 'Vogue Cover', title: 'Vogue December Issue', sub: 'Magazine Cover', type: 'image', source: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80', styleClass: 'card-magazine-clean has-washi-tape', magazineName: 'VOGUE', height: 280, left: 20, top: 20, rot: -1 },
+            
+            { layer: 'top', badge: 'Forbes Cover', title: 'Forbes Business Leaders', sub: 'Magazine Cover', type: 'image', source: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80', styleClass: 'card-magazine-clean has-washi-tape tape-olive', magazineName: 'FORBES', height: 260, left: 390, top: 180, rot: 1.2 },
+
+            { layer: 'top', badge: 'TikTok', title: 'Neo-Brutalism UI Motion', sub: 'Viral 24h Peak', type: 'video', source: 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&controls=0', styleClass: 'card-tiktok-style card-large', overlayText: '🎵 Original Sound #uimotion', height: 200, left: 20, top: 480, rot: -0.5 },
+
+            { layer: 'top', badge: 'YouTube', title: 'Deep Dive: Design Systems 2026', sub: 'Full Lecture', type: 'video', source: 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&controls=0', styleClass: 'card-tiktok-style card-large has-washi-tape tape-paper', overlayText: '▶ Watch Full Video', height: 210, left: 390, top: 620, rot: 1.1 },
+
+            { layer: 'top', badge: 'Pinterest', title: 'Aesthetic Mood Board Stream', sub: 'Pinterest Curated', type: 'image', source: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80', styleClass: 'card-pinterest-style', height: 180, left: 20, top: 920, rot: -0.8 },
+
+            { layer: 'top', badge: 'Pinterest', title: 'Minimalist Editorial Pins', sub: 'Visual Discovery', type: 'image', source: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=600&q=80', styleClass: 'card-pinterest-style has-washi-tape tape-paper', height: 160, left: 390, top: 1040, rot: 1.5 },
+
+            { layer: 'top', badge: 'Pinterest', title: 'Warm Organic Palettes', sub: 'Color Mood', type: 'image', source: 'https://images.unsplash.com/photo-1493863641943-9b68992a8d07?auto=format&fit=crop&w=600&q=80', styleClass: 'card-pinterest-style has-washi-tape', height: 150, left: 20, top: 1350, rot: -0.9 },
+
+            { layer: 'top', badge: 'New Music', title: 'Midnight Echoes Vinyl LP', sub: 'Single Release', type: 'vinyl', source: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80', styleClass: 'card-vinyl-standalone', height: 170, left: 390, top: 1420, rot: -2 },
+
+            { layer: 'top', badge: 'New Music', title: 'Ambient Design Flow Session', sub: 'Album Drop', type: 'vinyl', source: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=80', styleClass: 'card-vinyl-standalone', height: 170, left: 20, top: 1820, rot: 1.5 },
+
+            { layer: 'top', badge: 'Instagram', title: 'Brand Identity & Human UI', sub: 'Curated Project', type: 'image', source: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=600&q=80', styleClass: 'card-instagram-style has-washi-tape', igUser: 'design.radar', height: 170, left: 390, top: 1820, rot: -1.2 },
+
+            { layer: 'top', badge: 'Instagram', title: 'Editorial Magazine Cover', sub: 'Curated Trend', type: 'image', source: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80', styleClass: 'card-instagram-style', igUser: 'editorial.mag', height: 150, left: 20, top: 2220, rot: 0.8 },
+
+            { layer: 'top', badge: 'TikTok', title: 'Spatial Computing Prototyping', sub: 'Trending Tech', type: 'video', source: 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&controls=0', styleClass: 'card-tiktok-style has-washi-tape', overlayText: '🔥 #arfilter #spatialdesign', height: 170, left: 390, top: 2220, rot: 0.7 },
+
+
+            // --- שכבה תחתונה (תמונות השראה ורקע שיכולות להישען מעט מאחור או להחתך) ---
+            { layer: 'background', badge: 'Zine Print', title: 'Handmade Typography Archive', sub: 'Torn Paper Zine', type: 'image', source: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80', styleClass: 'card-torn-edge has-washi-tape', height: 140, left: 20, top: 2620, rot: 1.4 },
+
+            { layer: 'background', badge: 'Paper Cut', title: 'Raw Editorial Cutouts', sub: 'Paper Collage', type: 'image', source: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=600&q=80', styleClass: 'card-torn-edge card-folded-corner', height: 130, left: 390, top: 2600, rot: -1.5 },
+
+            { layer: 'background', badge: 'Dribbble', title: 'Interactive 3D Motion', sub: 'Popular Shot', type: 'image', source: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80', styleClass: 'card-torn-edge has-washi-tape tape-olive', height: 140, left: 20, top: 3000, rot: 0.9 },
+
+            { layer: 'background', badge: 'Behance', title: 'Surrealist Organic Textures', sub: 'Featured Showcase', type: 'image', source: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80', styleClass: 'card-folded-corner has-washi-tape', height: 130, left: 390, top: 2980, rot: 1.2 }
         ];
 
-        let currentWorkspaceY = 1850;
+        const floatingLabels = [
+            { text: '⚡ TIKTOK & YOUTUBE FEED', colorClass: '', top: 450, left: 200, rot: -2 },
+            { text: '✦ VOGUE, FORBES & PINTEREST', colorClass: 'terracotta-bg', top: 150, left: 220, rot: 1.5 },
+            { text: '📌 DESIGN ARCHIVE 2026', colorClass: 'yellow-bg', top: 1280, left: 240, rot: -1 }
+        ];
 
-        function buildCollage() {
+        function buildArtisticCollage() {
             const workspace = document.getElementById('collage-workspace');
-            document.getElementById('live-date').innerText = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            document.getElementById('live-date').innerText = "Sep 21, 2026";
 
-            platformTrends.forEach((item, index) => {
-                // תמונות מותאמות לפיצ'ר של אנשים, אמנות ועיצוב דיגיטלי
-                const platformImgUrl = `https://picsum.photos/seed/trendradar${index * 133}/600/400`;
+            inventoryTrends.forEach((item) => {
+                const card = document.createElement('div');
+                // הוספת קלאס השכבה המתאימה (layer-top או layer-background)
+                const layerClass = item.layer === 'top' ? 'layer-top' : 'layer-background';
+                card.className = `collage-card ${item.styleClass} ${layerClass}`;
+                
+                card.style.top = `${item.top}px`;
+                card.style.left = `${item.left}px`;
+                card.style.transform = `rotate(${item.rot}deg)`;
 
-                if (item.type === 'card') {
-                    const card = document.createElement('div');
-                    card.className = `collage-card ${item.class}`;
-                    card.style.top = `${item.top}px`;
-                    card.style.left = `${item.left}px`;
-                    card.style.transform = `rotate(${item.rot}deg)`;
-                    card.onclick = () => playEmbeddedMedia(item.platform, item.url, item.title, item.sub);
+                card.onclick = () => {
+                    inspectItem(item.title, item.sub, 'https://www.youtube.com/embed/dQw4w9WgXcQ');
+                };
 
-                    card.innerHTML = `
-                        <div class="visual-box ${item.class.includes('landscape') ? 'visual-box-landscape' : item.class.includes('square') ? 'visual-box-square' : ''}" style="background-image: url('${platformImgUrl}');">
+                let visualContent = '';
+                let extraHeader = '';
+
+                if (item.magazineName) {
+                    extraHeader = `<div class="magazine-masthead">${item.magazineName}</div>`;
+                } else if (item.styleClass.includes('card-instagram-style') && item.igUser) {
+                    extraHeader = `
+                        <div class="ig-header">
+                            <div class="ig-avatar"></div>
+                            <span>${item.igUser}</span>
+                        </div>
+                    `;
+                }
+
+                if (item.type === 'video') {
+                    visualContent = `
+                        <div class="visual-box" style="height: ${item.height}px;">
+                            <span class="badge-title">${item.badge}</span>
+                            <iframe src="${item.source}" allow="autoplay"></iframe>
+                            ${item.overlayText ? `<div class="tiktok-overlay-tags">${item.overlayText}</div>` : ''}
+                        </div>
+                    `;
+                } else if (item.type === 'vinyl') {
+                    visualContent = `
+                        <div class="vinyl-full-disc" style="background-image: url('${item.source}');">
+                            <div class="vinyl-center-hole"></div>
+                        </div>
+                    `;
+                } else {
+                    visualContent = `
+                        <div class="visual-box" style="height: ${item.height}px; background-image: url('${item.source}');">
                             <span class="badge-title">${item.badge}</span>
                         </div>
+                    `;
+                }
+
+                if (item.type === 'vinyl') {
+                    card.innerHTML = `
+                        ${visualContent}
+                        <div style="text-align: center;"><div class="card-caption">${item.title}</div></div>
+                    `;
+                } else {
+                    card.innerHTML = `
+                        ${extraHeader}
+                        ${visualContent}
                         <div class="card-caption">${item.title}</div>
                         <div class="card-sub">${item.sub}</div>
                     `;
-                    workspace.appendChild(card);
-                } else if (item.type === 'torn') {
-                    const torn = document.createElement('div');
-                    torn.className = 'torn-paper-art-frame';
-                    torn.style.top = `${item.top}px`;
-                    torn.style.left = `${item.left}px`;
-                    torn.style.transform = `rotate(${item.rot}deg)`;
-                    torn.onclick = () => playEmbeddedMedia('info', '', item.title, item.sub);
-
-                    torn.innerHTML = `
-                        <div style="height: 120px; display: flex; flex-direction: column; justify-content: center; font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 19px; color: var(--stroke-dark); text-align: center;">
-                            ${item.title}
-                            <span style="font-size: 11px; font-weight: normal; font-family: 'Special Elite', monospace; color: #666; margin-top: 5px;">${item.sub}</span>
-                        </div>
-                        <div class="card-caption" style="margin-top: 8px;">Cross-Platform Print Asset</div>
-                        <div class="card-sub">Dynamic Zine Grid</div>
-                    `;
-                    workspace.appendChild(torn);
                 }
+
+                workspace.appendChild(card);
+            });
+
+            floatingLabels.forEach(label => {
+                const tag = document.createElement('div');
+                tag.className = `floating-label-tag ${label.colorClass}`;
+                tag.style.top = `${label.top}px`;
+                tag.style.left = `${label.left}px`;
+                tag.style.transform = `rotate(${label.rot}deg)`;
+                tag.innerText = label.text;
+                workspace.appendChild(tag);
             });
         }
 
-        // טעינה אינסופית בגלילה של תכנים מרשתות העיצוב
-        window.addEventListener('scroll', () => {
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1000) {
-                const workspace = document.getElementById('collage-workspace');
-                const batch = [
-                    { type: 'card', class: 'card-landscape tape-olive dog-ear', top: currentWorkspaceY, left: 10, rot: 1, badge: 'Pinterest Aesthetic', title: 'Conceptual Architecture & People', sub: 'Trending Board', platform: 'pinterest', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '📌' },
-                    { type: 'card', class: 'card-square tape-terracotta', top: currentWorkspaceY + 20, left: 460, rot: -1.5, badge: 'Behance Branding', title: 'Experimental Typography & Editorial Design', sub: 'Curated Project', platform: 'behance', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🎨' }
-                ];
-                
-                batch.forEach((item, idx) => {
-                    const card = document.createElement('div');
-                    card.className = `collage-card ${item.class}`;
-                    card.style.top = `${item.top}px`;
-                    card.style.left = `${item.left}px`;
-                    card.style.transform = `rotate(${item.rot}deg)`;
-                    card.onclick = () => playEmbeddedMedia(item.platform, item.url, item.title, item.sub);
-                    const platformImgUrl = `https://picsum.photos/seed/socialscroll${currentWorkspaceY + idx}/600/400`;
+        function downloadMoodBoard() {
+            const container = document.getElementById('capture-container');
+            html2canvas(container, { scale: 2, useCORS: true }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'Moodboard-21-09-2026.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
 
-                    card.innerHTML = `
-                        <div class="visual-box visual-box-landscape" style="background-image: url('${platformImgUrl}');">
-                            <span class="badge-title">${item.badge}</span>
-                        </div>
-                        <div class="card-caption">${item.title}</div>
-                        <div class="card-sub">${item.sub}</div>
-                    `;
-                    workspace.appendChild(card);
-                });
-                currentWorkspaceY += 550;
-            }
-        });
-
-        document.addEventListener("DOMContentLoaded", buildCollage);
-
-        function playEmbeddedMedia(platform, mediaUrl, title, description) {
-            const playerBox = document.getElementById('player-box');
+        function inspectItem(title, desc, mediaUrl) {
             document.getElementById('preview-title').innerText = title;
-            document.getElementById('preview-desc').innerText = description;
+            document.getElementById('preview-desc').innerText = desc;
+            const playerBox = document.getElementById('player-box');
 
             if (mediaUrl && mediaUrl !== '') {
                 playerBox.innerHTML = `<iframe src="${mediaUrl}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
             } else {
-                playerBox.innerHTML = `<div class="default-player-placeholder" style="background:#2b2b2b; color:#b85d41; font-family:'Special Elite',monospace; font-size:14px; padding:20px; text-align:center;">✨ Loaded from ${platform.toUpperCase()} Feed</div>`;
+                playerBox.innerHTML = `<div class="default-player-placeholder">Live Mood Board Asset Loaded</div>`;
             }
         }
+
+        document.addEventListener("DOMContentLoaded", buildArtisticCollage);
     </script>
 </body>
 </html>
