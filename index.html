@@ -40,7 +40,7 @@
         .board-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
             margin-bottom: 25px;
             flex-wrap: wrap;
             gap: 15px;
@@ -59,7 +59,7 @@
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            gap: 10px;
+            gap: 8px;
         }
 
         .live-date {
@@ -319,8 +319,19 @@
         }
 
         @media (max-width: 768px) {
-            .board-header h1 { font-size: 32px; }
-            .live-date { font-size: 18px; }
+            .board-header {
+                justify-content: space-between;
+                align-items: flex-start;
+            }
+            .board-header h1 { font-size: 28px; }
+            .live-date { font-size: 16px; }
+            .header-right-side {
+                align-items: flex-end;
+            }
+            .download-btn {
+                font-size: 9px;
+                padding: 6px 10px;
+            }
             .collage-workspace {
                 width: 100% !important; height: auto !important; display: grid !important;
                 grid-template-columns: repeat(2, 1fr) !important; gap: 15px !important; padding: 10px 0;
@@ -488,7 +499,6 @@
                 card.style.left = `${item.pos.left}px`;
                 card.style.transform = `rotate(${item.pos.rot}deg)`;
 
-                // וידוא שהלחיצה מעבירה את הכותרת, התיאור והמדיה הספציפיים של הכרטיסייה הזו בדיוק
                 const activeVideo = item.videoUrl || 'https://www.youtube.com/embed/5qap5aO4i9A';
                 card.onclick = () => {
                     inspectItem(item.title, item.sub || item.badge || 'Trend Item', activeVideo);
