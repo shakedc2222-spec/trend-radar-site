@@ -1,0 +1,28 @@
+name: Refresh video pool
+
+on:
+  schedule:
+    - cron: "0 3 * * *"      # כל יום ב-03:00 UTC (בוקר בישראל)
+  workflow_dispatch: {}       # הרצה ידנית מלשונית Actions
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Update video-pool.json
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: python update_site.py
+      - name: Commit if changed
+        run: |
+          git config user.name  "trend-radar-bot"
+          git config user.email "trend-radar-bot@users.noreply.github.com"
+          git add video-pool.json
+          git diff --staged --quiet || (git commit -m "chore: refresh video pool" && git push)
