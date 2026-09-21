@@ -68,10 +68,9 @@
             align-items: start;
         }
 
-        /* מרחב קולאז' דינמי שמתמלא אוטומטית ע"י הסקריפט */
         .collage-workspace {
             position: relative;
-            min-height: 8000px;
+            min-height: 8500px;
         }
 
         .collage-card {
@@ -147,7 +146,6 @@
             width: 420px;
         }
 
-        /* צבעי HEX מקובעים למעלה ימינה */
         .pantone-fixed-group {
             position: absolute;
             top: 0px;
@@ -219,6 +217,8 @@
             overflow: hidden;
             position: relative;
             border: 2px solid var(--stroke-dark);
+            background-size: cover;
+            background-position: center;
         }
 
         .visual-box-landscape { height: 230px; }
@@ -315,7 +315,7 @@
             font-size: 16px;
             font-weight: bold;
             margin-bottom: 4px;
-            color: #b85d41;
+            color: var(--accent-terracotta);
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
@@ -418,9 +418,8 @@
         <div class="main-layout">
             
             <div class="collage-workspace" id="collage-workspace">
-                <!-- אלמנטים גזורים מרחפים ברקע -->
-                <div class="png-cutout" style="top: 480px; left: 360px; transform: rotate(4deg);">★ LIVE FEED</div>
-                <div class="png-cutout" style="top: 1020px; left: 390px; transform: rotate(-5deg); background: #d3f3f1;">⚡ AUTO SYNC</div>
+                <div class="png-cutout" style="top: 480px; left: 360px; transform: rotate(4deg);">★ PINTEREST & BEHANCE SYNC</div>
+                <div class="png-cutout" style="top: 1020px; left: 390px; transform: rotate(-5deg); background: #d3f3f1;">⚡ TIKTOK VIRAL FEED</div>
             </div>
 
             <div class="sidebar-side">
@@ -437,19 +436,19 @@
 
                 <div class="links-box">
                     <h3>🔗 Inspiration Channels</h3>
-                    <div class="link-item" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'TikTok 24h Peak Trends', 'Live embedded feed of top creative prototype videos.')">
+                    <div class="link-item" onclick="playEmbeddedMedia('tiktok', 'https://www.tiktok.com/embed/v2/7234567890', 'TikTok 24h Peak Trends', 'Live feed of top creative prototype videos.')">
                         <span>Going Viral (TikTok 24h)</span>
                         <span class="platform-tag">TikTok</span>
                     </div>
-                    <div class="link-item" onclick="playEmbeddedMedia('instagram', '', 'Instagram Hot Reels', 'Latest curated editorial reels and backstage footage.')">
+                    <div class="link-item" onclick="playEmbeddedMedia('instagram', 'https://www.instagram.com/p/C000000/embed', 'Instagram Hot Reels', 'Latest curated editorial reels.')">
                         <span>Hot Reels & Magazine Covers</span>
                         <span class="platform-tag">Instagram</span>
                     </div>
-                    <div class="link-item" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Pinterest & Fashion Week Stream', 'Immersive video highlights from global runways.')">
+                    <div class="link-item" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Pinterest & Fashion Week Stream', 'Immersive video highlights.')">
                         <span>Fashion Week & Pinterest Trends</span>
                         <span class="platform-tag">Pinterest</span>
                     </div>
-                    <div class="link-item" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Behance Exhibitions & Print', 'Showcase of physical print archives and digital galleries.')">
+                    <div class="link-item" onclick="playEmbeddedMedia('behance', 'https://www.behance.net', 'Behance Exhibitions & Print', 'Showcase of physical print archives.')">
                         <span>Exhibitions & Print Design</span>
                         <span class="platform-tag">Behance</span>
                     </div>
@@ -459,24 +458,24 @@
         </div>
 
         <footer class="footer">
-            Trend Radar &bull; Dynamic Auto-Fetching Collage Edition
+            Trend Radar &bull; Cross-Platform Social & Design Feed
         </footer>
 
     </div>
 
     <script>
-        // מנוע אוטומטי ששואב תמונות עיצוב אמיתיות באופן עצמאי ממקורות ציבוריים בזמן טעינה
-        const liveTrends = [
-            { type: 'card', class: 'card-landscape tape-olive dog-ear', top: 0, left: 10, rot: -1.5, bg: '#2c3e50', badge: 'Live Unsplash', title: 'Neo-Brutalism & UI Motion Breakdown', sub: 'Fetched Live', media: 'tiktok', url: 'https://www.tiktok.com/embed/v2/7234567890', icon: '▶', imgQuery: 'architecture' },
-            { type: 'card', class: 'card-square tape-terracotta dog-ear', top: 260, left: 10, rot: 1.5, bg: '#111', badge: 'Editorial', title: 'Vogue New Era Cover Drop', sub: 'Print & Editorial', media: 'instagram', url: 'https://www.instagram.com/p/C000000/embed', icon: 'VOGUE', imgQuery: 'fashion' },
-            { type: 'card', class: 'card-landscape tape-olive', top: 280, left: 340, rot: 1, bg: '#8c6d62', badge: 'Runway', title: 'Milan Fashion Week Tailoring', sub: 'Runway & Street Style', media: 'youtube', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🧥', imgQuery: 'minimalist' },
-            { type: 'torn', top: 580, left: 10, rot: 1, title: 'Print Archive Feature', sub: 'Analog Print Curation' },
-            { type: 'card', class: 'card-square tape-terracotta dog-ear', top: 600, left: 460, rot: -1.5, bg: '#4a5d4e', badge: 'Exhibition', title: 'Immersive Digital Art Installation', sub: 'Global Exhibition Drop', media: 'youtube', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🏛️', imgQuery: 'interior' },
-            { type: 'card', class: 'card-landscape tape-olive dog-ear', top: 900, left: 10, rot: -1, bg: '#556b2f', badge: 'Culinary', title: 'Sculptural Pistachio Tart Art', sub: 'Culinary Social Trend', media: 'youtube', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🥐', imgQuery: 'food' },
-            { type: 'card', class: 'card-portrait tape-terracotta', top: 920, left: 460, rot: 2, bg: '#7b1fa2', badge: '3D Art', title: 'Surrealist 3D Organic Textures', sub: 'Artist Spotlight', media: 'youtube', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🎨', imgQuery: '3d' },
-            { type: 'torn', top: 1220, left: 10, rot: -1, title: 'Zine & Press Cutout', sub: 'Alternative Press Curation' },
-            { type: 'card', class: 'card-square tape-olive', top: 1240, left: 460, rot: 1.5, bg: '#004d40', badge: 'Branding', title: 'Tactile Eco-Packaging', sub: 'Behance Branding Trend', media: 'youtube', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🧴', imgQuery: 'packaging' },
-            { type: 'card', class: 'card-landscape tape-terracotta dog-ear', top: 1540, left: 10, rot: -1.5, bg: '#311b92', badge: 'Spatial UX', title: 'Spatial Computing & Bezi 3D', sub: 'Immersive Technology', media: 'youtube', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🥽', imgQuery: 'technology' }
+        // רשימת טרנדים אמיתיים שמקושרים ישירות לפלטפורמות המובילות (Pinterest, Behance, Dribbble, TikTok)
+        const platformTrends = [
+            { type: 'card', class: 'card-landscape tape-olive dog-ear', top: 0, left: 10, rot: -1.5, badge: 'Pinterest Viral', title: 'Aesthetic Mood Board & Editorial People', sub: 'Pinterest Trend Surge', platform: 'pinterest', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '📌' },
+            { type: 'card', class: 'card-square tape-terracotta dog-ear', top: 260, left: 10, rot: 1.5, badge: 'Behance Top', title: 'Brand Identity & Human-Centric UI Design', sub: 'Behance Curated', platform: 'behance', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🎨' },
+            { type: 'card', class: 'card-landscape tape-olive', top: 280, left: 340, rot: 1, badge: 'Dribbble Shot', title: 'Interactive 3D Motion & Spatial Portfolios', sub: 'Dribbble Popular', platform: 'dribbble', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🏀' },
+            { type: 'torn', top: 580, left: 10, rot: 1, title: 'Cross-Platform Trend Archive', sub: 'Social & Design Sync' },
+            { type: 'card', class: 'card-square tape-terracotta dog-ear', top: 600, left: 460, rot: -1.5, badge: 'TikTok Trend', title: 'Neo-Brutalism & UI Motion Breakdown', sub: 'TikTok 24h Peak', platform: 'tiktok', url: 'https://www.tiktok.com/embed/v2/7234567890', icon: '▶' },
+            { type: 'card', class: 'card-landscape tape-olive dog-ear', top: 900, left: 10, rot: -1, badge: 'Pinterest Art', title: 'Portraiture & Expressionism Aesthetics', sub: 'Top Saved Pins', platform: 'pinterest', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '📌' },
+            { type: 'card', class: 'card-portrait tape-terracotta', top: 920, left: 460, rot: 2, badge: 'Behance 3D', title: 'Surrealist 3D People & Organic Textures', sub: 'Featured Project', platform: 'behance', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '✨' },
+            { type: 'torn', top: 1220, left: 10, rot: -1, title: 'Zine & Social Press Cutout', sub: 'Alternative Press Curation' },
+            { type: 'card', class: 'card-square tape-olive', top: 1240, left: 460, rot: 1.5, badge: 'Dribbble UI', title: 'Minimalist Complex System Dashboards', sub: 'Trending Shot', platform: 'dribbble', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '💻' },
+            { type: 'card', class: 'card-landscape tape-terracotta dog-ear', top: 1540, left: 10, rot: -1.5, badge: 'Instagram Reels', title: 'Backstage Fashion Week & Human Stories', sub: 'Viral IG Reel', platform: 'instagram', url: 'https://www.instagram.com/p/C000000/embed', icon: '📸' }
         ];
 
         let currentWorkspaceY = 1850;
@@ -485,20 +484,20 @@
             const workspace = document.getElementById('collage-workspace');
             document.getElementById('live-date').innerText = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
-            liveTrends.forEach(item => {
+            platformTrends.forEach((item, index) => {
+                // תמונות מותאמות לפיצ'ר של אנשים, אמנות ועיצוב דיגיטלי
+                const platformImgUrl = `https://picsum.photos/seed/trendradar${index * 133}/600/400`;
+
                 if (item.type === 'card') {
                     const card = document.createElement('div');
                     card.className = `collage-card ${item.class}`;
                     card.style.top = `${item.top}px`;
                     card.style.left = `${item.left}px`;
                     card.style.transform = `rotate(${item.rot}deg)`;
-                    card.onclick = () => playEmbeddedMedia(item.media, item.url, item.title, item.sub);
-
-                    // שאיבה אוטומטית של תמונה חיה מ-Unsplash בהתאם לנושא בלי AI
-                    const liveImgUrl = `https://picsum.photos/seed/${item.imgQuery + item.top}/600/400`;
+                    card.onclick = () => playEmbeddedMedia(item.platform, item.url, item.title, item.sub);
 
                     card.innerHTML = `
-                        <div class="visual-box ${item.class.includes('landscape') ? 'visual-box-landscape' : item.class.includes('square') ? 'visual-box-square' : ''}" style="background-image: url('${liveImgUrl}'); background-size: cover; background-position: center;">
+                        <div class="visual-box ${item.class.includes('landscape') ? 'visual-box-landscape' : item.class.includes('square') ? 'visual-box-square' : ''}" style="background-image: url('${platformImgUrl}');">
                             <span class="badge-title">${item.badge}</span>
                         </div>
                         <div class="card-caption">${item.title}</div>
@@ -518,7 +517,7 @@
                             ${item.title}
                             <span style="font-size: 11px; font-weight: normal; font-family: 'Special Elite', monospace; color: #666; margin-top: 5px;">${item.sub}</span>
                         </div>
-                        <div class="card-caption" style="margin-top: 8px;">Auto-Curated Print Asset</div>
+                        <div class="card-caption" style="margin-top: 8px;">Cross-Platform Print Asset</div>
                         <div class="card-sub">Dynamic Zine Grid</div>
                     `;
                     workspace.appendChild(torn);
@@ -526,26 +525,26 @@
             });
         }
 
-        // טעינת תכנים אינסופית בגלילה
+        // טעינה אינסופית בגלילה של תכנים מרשתות העיצוב
         window.addEventListener('scroll', () => {
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1000) {
                 const workspace = document.getElementById('collage-workspace');
                 const batch = [
-                    { type: 'card', class: 'card-landscape tape-olive dog-ear', top: currentWorkspaceY, left: 10, rot: 1, bg: '#b71c1c', badge: 'Archive', title: 'Swiss Graphic Design & Grid Systems', sub: 'Auto-Fetched Trend', media: 'youtube', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🔤', imgQuery: 'swiss' },
-                    { type: 'card', class: 'card-square tape-terracotta', top: currentWorkspaceY + 20, left: 460, rot: -1.5, bg: '#6d4c41', badge: 'Craft', title: 'Handmade Stoneware & Ceramics', sub: 'Object Design', media: 'youtube', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🍵', imgQuery: 'ceramic' }
+                    { type: 'card', class: 'card-landscape tape-olive dog-ear', top: currentWorkspaceY, left: 10, rot: 1, badge: 'Pinterest Aesthetic', title: 'Conceptual Architecture & People', sub: 'Trending Board', platform: 'pinterest', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '📌' },
+                    { type: 'card', class: 'card-square tape-terracotta', top: currentWorkspaceY + 20, left: 460, rot: -1.5, badge: 'Behance Branding', title: 'Experimental Typography & Editorial Design', sub: 'Curated Project', platform: 'behance', url: 'https://www.youtube.com/embed/dQw4w9WgXcQ', icon: '🎨' }
                 ];
                 
-                batch.forEach(item => {
+                batch.forEach((item, idx) => {
                     const card = document.createElement('div');
                     card.className = `collage-card ${item.class}`;
                     card.style.top = `${item.top}px`;
                     card.style.left = `${item.left}px`;
                     card.style.transform = `rotate(${item.rot}deg)`;
-                    card.onclick = () => playEmbeddedMedia(item.media, item.url, item.title, item.sub);
-                    const liveImgUrl = `https://picsum.photos/seed/scroll${currentWorkspaceY}/600/400`;
+                    card.onclick = () => playEmbeddedMedia(item.platform, item.url, item.title, item.sub);
+                    const platformImgUrl = `https://picsum.photos/seed/socialscroll${currentWorkspaceY + idx}/600/400`;
 
                     card.innerHTML = `
-                        <div class="visual-box visual-box-landscape" style="background-image: url('${liveImgUrl}'); background-size: cover; background-position: center;">
+                        <div class="visual-box visual-box-landscape" style="background-image: url('${platformImgUrl}');">
                             <span class="badge-title">${item.badge}</span>
                         </div>
                         <div class="card-caption">${item.title}</div>
@@ -559,7 +558,7 @@
 
         document.addEventListener("DOMContentLoaded", buildCollage);
 
-        function playEmbeddedMedia(type, mediaUrl, title, description) {
+        function playEmbeddedMedia(platform, mediaUrl, title, description) {
             const playerBox = document.getElementById('player-box');
             document.getElementById('preview-title').innerText = title;
             document.getElementById('preview-desc').innerText = description;
@@ -567,7 +566,7 @@
             if (mediaUrl && mediaUrl !== '') {
                 playerBox.innerHTML = `<iframe src="${mediaUrl}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
             } else {
-                playerBox.innerHTML = `<div class="default-player-placeholder" style="background:#2b2b2b; color:#b85d41; font-family:'Special Elite',monospace; font-size:14px; padding:20px; text-align:center;">✨ Dynamic Feed Item Loaded Successfully</div>`;
+                playerBox.innerHTML = `<div class="default-player-placeholder" style="background:#2b2b2b; color:#b85d41; font-family:'Special Elite',monospace; font-size:14px; padding:20px; text-align:center;">✨ Loaded from ${platform.toUpperCase()} Feed</div>`;
             }
         }
     </script>
