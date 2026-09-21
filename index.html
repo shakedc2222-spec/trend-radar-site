@@ -178,7 +178,7 @@
             position: relative;
         }
 
-        /* אזור קולאז' תחום בשני השלישים השמאליים בלבד */
+        /* אזור קולאז' בדסקטופ */
         .collage-workspace {
             position: relative;
             width: 750px;
@@ -198,7 +198,6 @@
             width: 250px;
         }
 
-        /* מערכת שכבות: שכבה עליונה לפריטים חשובים ושכבה תחתונה לתמונות השראה */
         .layer-top {
             z-index: 30 !important;
         }
@@ -573,19 +572,30 @@
             .top-controls-wrapper { grid-template-columns: 1fr; gap: 15px; }
         }
 
+        /* עיצוב רספונסיבי למובייל: רשת קולאז' דינמית 2 בשורה עם סיבובים רנדומליים עדינים */
         @media (max-width: 768px) {
             .board-header h1 { font-size: 32px; }
             .live-date { font-size: 18px; }
-            .collage-workspace { width: 100% !important; min-height: 4200px; }
+            .collage-workspace {
+                width: 100% !important;
+                height: auto !important;
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 15px !important;
+                padding: 10px 0;
+            }
             .collage-card {
                 position: relative !important;
-                left: 0 !important;
+                left: auto !important;
                 top: auto !important;
-                margin-bottom: 20px;
                 width: 100% !important;
-                max-width: 300px;
-                transform: none !important;
+                max-width: none !important;
+                margin-bottom: 0 !important;
             }
+            /* החלת זוויות רנדומליות עדינות לפריטים במובייל */
+            .collage-card:nth-child(odd) { transform: rotate(-2deg) !important; }
+            .collage-card:nth-child(even) { transform: rotate(1.5deg) !important; }
+            .collage-card:nth-child(3n) { transform: rotate(-1deg) !important; }
             .floating-label-tag { display: none; }
         }
     </style>
@@ -638,7 +648,7 @@
                 </div>
 
                 <div class="collage-workspace" id="collage-workspace">
-                    <!-- יופקו דינמית לפי שכבות ומלאי מדויק -->
+                    <!-- יופקו דינמית -->
                 </div>
             </div>
 
@@ -684,9 +694,7 @@
     </div>
 
     <script>
-        // רשימת מלאי עם הגדרת שכבות (layer-top לעליונה, layer-background לתחתונה)
         const inventoryTrends = [
-            // --- שכבה עליונה (פריטים ראשיים: סרטונים, מגזינים, תקליטים, אינסטגרם, פינטרסט) ---
             { layer: 'top', badge: 'Vogue Cover', title: 'Vogue December Issue', sub: 'Magazine Cover', type: 'image', source: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80', styleClass: 'card-magazine-clean has-washi-tape', magazineName: 'VOGUE', height: 280, left: 20, top: 20, rot: -1 },
             
             { layer: 'top', badge: 'Forbes Cover', title: 'Forbes Business Leaders', sub: 'Magazine Cover', type: 'image', source: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80', styleClass: 'card-magazine-clean has-washi-tape tape-olive', magazineName: 'FORBES', height: 260, left: 390, top: 180, rot: 1.2 },
@@ -711,8 +719,6 @@
 
             { layer: 'top', badge: 'TikTok', title: 'Spatial Computing Prototyping', sub: 'Trending Tech', type: 'video', source: 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&controls=0', styleClass: 'card-tiktok-style has-washi-tape', overlayText: '🔥 #arfilter #spatialdesign', height: 170, left: 390, top: 2220, rot: 0.7 },
 
-
-            // --- שכבה תחתונה (תמונות השראה ורקע שיכולות להישען מעט מאחור או להחתך) ---
             { layer: 'background', badge: 'Zine Print', title: 'Handmade Typography Archive', sub: 'Torn Paper Zine', type: 'image', source: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80', styleClass: 'card-torn-edge has-washi-tape', height: 140, left: 20, top: 2620, rot: 1.4 },
 
             { layer: 'background', badge: 'Paper Cut', title: 'Raw Editorial Cutouts', sub: 'Paper Collage', type: 'image', source: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=600&q=80', styleClass: 'card-torn-edge card-folded-corner', height: 130, left: 390, top: 2600, rot: -1.5 },
@@ -734,7 +740,6 @@
 
             inventoryTrends.forEach((item) => {
                 const card = document.createElement('div');
-                // הוספת קלאס השכבה המתאימה (layer-top או layer-background)
                 const layerClass = item.layer === 'top' ? 'layer-top' : 'layer-background';
                 card.className = `collage-card ${item.styleClass} ${layerClass}`;
                 
