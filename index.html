@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shaked's Ultimate Trend Radar & Mood Board</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f2efe9;
+            --polaroid-bg: #fdfbf7;
+            --text-main: #1a1a1a;
+            --accent-terracotta: #c86d51;
+            --dark-card: #222225;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px;
+            overflow-x: hidden;
+        }
+
+        .site-container {
+            max-width: 1450px;
+            margin: 0 auto;
+        }
+
+        .board-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .board-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            font-weight: 900;
+            font-style: italic;
+            margin: 0;
+            color: #111;
+        }
+
+        .live-date {
+            font-size: 13px;
+            font-weight: 600;
+            background: #e2ddd0;
+            padding: 6px 16px;
+            border-radius: 20px;
+            color: #444;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .collage-workspace {
+            position: relative;
+            min-height: 2600px;
+        }
+
+        .collage-card {
+            position: absolute;
+            background: var(--polaroid-bg);
+            padding: 12px 12px 25px 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border: 1px solid #e2ddd0;
+            cursor: pointer;
+            transition: transform 0.2s, z-index 0.2s;
+        }
+        .collage-card:hover { transform: rotate(0deg) scale(1.02) !important; z-index: 50; }
+
+        /* עיצוב מדויק למסגרת הנייר הקרוע המבוססת על התמונה האמיתית torn-paper.png */
+        .torn-paper-container {
+            position: absolute;
+            top: 520px;
+            left: 20px;
+            width: 340px;
+            cursor: pointer;
+            z-index: 6;
+            transition: transform 0.2s;
+        }
+        .torn-paper-container:hover { transform: scale(1.02); z-index: 50; }
+        
+        .torn-paper-img {
+            width: 100%;
+            display: block;
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.15));
+        }
+
+        .torn-paper-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 75%;
+            text-align: center;
+        }
+
+        .visual-box {
+            height: 180px;
+            background: var(--dark-card);
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 28px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .badge-title {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.7);
+            color: #fff;
+            padding: 3px 8px;
+            font-size: 10px;
+            border-radius: 3px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .card-caption {
+            margin-top: 10px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .card-sub {
+            font-size: 10px;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        .sidebar-side {
+            position: sticky;
+            top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .preview-panel {
+            background: var(--dark-card);
+            color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .preview-panel h4 {
+            margin: 0 0 10px 0;
+            font-size: 11px;
+            color: #a0a0ab;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .embedded-player-container {
+            width: 100%;
+            height: 280px;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .embedded-player-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .default-player-placeholder {
+            color: #777;
+            font-size: 13px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #preview-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: #ff9f43;
+            font-family: 'Playfair Display', serif;
+        }
+
+        #preview-desc {
+            font-size: 12px;
+            color: #ccc;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .links-box {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e2ddd0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+        }
+
+        .links-box h3 {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            font-weight: 800;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .link-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0eae1;
+            text-decoration: none;
+            color: #2b2b2b;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .link-item:last-child { border-bottom: none; }
+        .link-item:hover { color: var(--accent-terracotta); }
+
+        .platform-tag {
+            font-size: 9px;
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #555;
+            text-transform: uppercase;
+        }
+
+        .viral-sounds-section {
+            position: absolute;
+            top: 400px;
+            left: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 40;
+        }
+
+        .sound-circle {
+            width: 55px;
+            height: 55px;
+            background: #222225;
+            color: #c86d51;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            border: 2px solid #fff;
+        }
+        .sound-circle:hover { transform: scale(1.1); background: var(--accent-terracotta); color: #fff; }
+
+        .footer {
+            grid-column: span 2;
+            text-align: center;
+            font-size: 11px;
+            color: #888;
+            margin-top: 100px;
+            border-top: 1px dashed #d5cebc;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="site-container">
+        
+        <header class="board-header">
+            <h1>Shaked's Trend Radar</h1>
+            <div class="live-date">Updated: Sep 21, 2026</div>
+        </header>
+
+        <div class="main-layout">
+            
+            <div class="collage-workspace">
+                
+                <!-- TikTok: Going Viral Now -->
+                <div class="collage-card" style="top: 0px; left: 10px; width: 270px; transform: rotate(-3deg); z-index: 2;" onclick="playEmbeddedMedia('tiktok', 'https://www.tiktok.com/embed/v2/7234567890', 'Going Viral Now: TikTok UI Motion', 'The absolute #1 trending short video format showcasing rapid Figma prototyping.')">
+                    <div class="visual-box" style="background: linear-gradient(135deg, #2c3e50, #4ca1af);"><span class="badge-title">Going Viral Now</span>▶</div>
+                    <div class="card-caption">Neo-Brutalism UI Breakdown</div>
+                    <div class="card-sub">TikTok 24h Peak Trend</div>
+                </div>
+
+                <!-- Instagram: Hot Reels & Vogue -->
+                <div class="collage-card" style="top: 20px; left: 310px; width: 260px; transform: rotate(2.5deg); z-index: 3;" onclick="playEmbeddedMedia('instagram', 'https://www.instagram.com/p/C000000/embed', 'Hot Instagram Reels: Vogue Cover Drop', 'Behind-the-scenes editorial reel of the latest groundbreaking magazine cover.')">
+                    <div class="visual-box" style="background: #111;"><span class="badge-title">Hot on Instagram</span>VOGUE</div>
+                    <div class="card-caption">Vogue New Era Cover Drop</div>
+                    <div class="card-sub">Print & Editorial IG Reel</div>
+                </div>
+
+                <!-- Hot Colors -->
+                <div class="collage-card" style="top: 15px; left: 590px; width: 220px; transform: rotate(-1.5deg); z-index: 4;" onclick="playEmbeddedMedia('info', '', 'Hot Colors for the Coming Season', 'Terracotta, Soft Blush, and Warm Olive driving autumn branding.')">
+                    <div style="font-family: 'Playfair Display', serif; font-size: 12px; font-weight: 700; margin-bottom: 8px; text-align: center;">Hot Colors for Season</div>
+                    <div style="display: flex; gap: 6px;">
+                        <div style="flex:1; height:45px; background:#C86D51; border-radius:3px;"></div>
+                        <div style="flex:1; height:45px; background:#E3AAB1; border-radius:3px;"></div>
+                        <div style="flex:1; height:45px; background:#8A9A86; border-radius:3px;"></div>
+                    </div>
+                    <div class="card-caption" style="text-align:center; margin-top:6px;">Seasonal Palette</div>
+                </div>
+
+                <!-- Print Frame with Real Torn Paper PNG Image -->
+                <div class="torn-paper-container" onclick="playEmbeddedMedia('info', '', 'Print Archive: Torn Paper Edition', 'Custom ripped paper frame bridging analog print heritage with modern curation.')">
+                    <img src="torn-paper.png" alt="Torn Paper" class="torn-paper-img">
+                    <div class="torn-paper-content">
+                        <div style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 17px; color: #111; margin-bottom: 4px;">Print Archive</div>
+                        <div style="font-size: 11px; font-weight: 700; color: #222;">Cut-Out Magazine Feature</div>
+                        <div style="font-size: 9px; color: #666; text-transform: uppercase; margin-top: 2px;">Analog Print</div>
+                    </div>
+                </div>
+
+                <!-- פריטים נוספים בגלילה -->
+                <div class="collage-card" style="top: 260px; left: 150px; width: 280px; transform: rotate(-2deg); z-index: 5;" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Milan Fashion Week Highlights', 'Sculptural silhouettes and structured blazers dominating international runways.')">
+                    <div class="visual-box" style="background: linear-gradient(135deg, #8c6d62, #d7ccc8);">🧥</div>
+                    <div class="card-caption">Milan Fashion Week Highlights</div>
+                    <div class="card-sub">Runway & Street Style</div>
+                </div>
+
+                <div class="collage-card" style="top: 300px; left: 460px; width: 270px; transform: rotate(3deg); z-index: 3;" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Digital Art Installation', 'Contemporary digital light installation exploring boundaries.')">
+                    <div class="visual-box" style="background: linear-gradient(135deg, #4a5d4e, #8a9a86);">🏛️</div>
+                    <div class="card-caption">Digital Art Installation</div>
+                    <div class="card-sub">Global Exhibition Drop</div>
+                </div>
+
+                <div class="viral-sounds-section">
+                    <div class="sound-circle" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Viral Audio: Ambient Design Flow', 'Top trending sound on TikTok & IG Reels.')" title="Play Sound 1">🔊</div>
+                    <div class="sound-circle" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'New Track: Midnight Echoes Remix', 'Underground electronic track.')" title="Play Sound 2">🎵</div>
+                    <div class="sound-circle" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Audio Trend: Spatial UX Podcast', 'Hot discussion on future spatial computing.')" title="Play Sound 3">🎙️</div>
+                </div>
+
+            </div>
+
+            <div class="sidebar-side">
+                <div class="preview-panel">
+                    <h4>🔍 Live In-Site Media Player</h4>
+                    
+                    <div class="embedded-player-container" id="player-box">
+                        <div class="default-player-placeholder">Click any item on the board to play video / view inside site</div>
+                    </div>
+
+                    <div id="preview-title">Select an item</div>
+                    <p id="preview-desc">Videos and media will play directly inside this frame without leaving the page.</p>
+                </div>
+
+                <div class="links-box">
+                    <h3>🔗 Inspiration Channels</h3>
+                    <div class="link-item" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'TikTok 24h Peak Trends', 'Live embedded feed of top creative prototype videos.')">
+                        <span>Going Viral (TikTok 24h)</span>
+                        <span class="platform-tag">TikTok</span>
+                    </div>
+                    <div class="link-item" onclick="playEmbeddedMedia('instagram', '', 'Instagram Hot Reels', 'Latest curated editorial reels and backstage footage.')">
+                        <span>Hot Reels & Magazine Covers</span>
+                        <span class="platform-tag">Instagram</span>
+                    </div>
+                    <div class="link-item" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Pinterest & Fashion Week Stream', 'Immersive video highlights from global runways.')">
+                        <span>Fashion Week & Pinterest Trends</span>
+                        <span class="platform-tag">Pinterest</span>
+                    </div>
+                    <div class="link-item" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Behance Exhibitions & Print', 'Showcase of physical print archives and digital galleries.')">
+                        <span>Exhibitions & Print Design</span>
+                        <span class="platform-tag">Behance</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <footer class="footer">
+            Shaked's Trend Radar &bull; Dynamic In-Site Media Player Edition
+        </footer>
+
+    </div>
+
+    <script>
+        function playEmbeddedMedia(type, mediaUrl, title, description) {
+            const playerBox = document.getElementById('player-box');
+            document.getElementById('preview-title').innerText = title;
+            document.getElementById('preview-desc').innerText = description;
+
+            if (mediaUrl && mediaUrl !== '') {
+                playerBox.innerHTML = `<iframe src="${mediaUrl}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+            } else {
+                playerBox.innerHTML = `<div class="default-player-placeholder">Interactive mood board asset (Print / Color Palette)</div>`;
+            }
+        }
+    </script>
+</body>
+</html>
