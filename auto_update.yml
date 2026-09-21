@@ -1,0 +1,29 @@
+name: Auto Update Trend Radar
+
+on:
+  schedule:
+    # מוגדר לרוץ אוטומטית בימי ראשון וחמישי בשעה 08:00 בבוקר (UTC)
+    - cron: '0 6 * * 0,4'
+  workflow_dispatch: allow manual trigger
+
+jobs:
+  update-site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Run automated update script
+        run: python update_site.py
+
+      - name: Commit and push changes if any
+        run: |
+          git config --global user.name "Trend Radar Bot"
+          git config --global user.email "bot@users.noreply.github.com"
+          git add -A
+          git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 Automated Trend Radar Update" && git push)
