@@ -8,24 +8,24 @@ def generate_html():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shaked's Ultimate Trend Radar & Mood Board</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+    <title>Trend Radar & Mood Board</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #e8e2d5;
-            --polaroid-bg: #fffbf2;
-            --text-main: #111;
-            --accent-pink: #ff3399;
-            --accent-blue: #3b82f6;
+            --bg-color: #e6e2d3;
+            --polaroid-bg: #fffdf9;
+            --stroke-dark: #3a3a3a;
+            --accent-terracotta: #b85d41;
+            --accent-olive: #5f6b55;
             --dark-card: #1c1c1e;
         }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-color);
-            background-image: radial-gradient(#d5cebc 1px, transparent 1px);
+            background-image: radial-gradient(#9c9989 1.5px, transparent 1.5px);
             background-size: 24px 24px;
-            color: var(--text-main);
+            color: var(--stroke-dark);
             margin: 0;
             padding: 40px;
             overflow-x: hidden;
@@ -40,139 +40,186 @@ def generate_html():
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px;
-            border-bottom: 3px solid #111;
-            padding-bottom: 15px;
+            margin-bottom: 30px;
         }
 
         .board-header h1 {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Raleway', sans-serif;
             font-size: 46px;
-            font-weight: 900;
-            font-style: italic;
+            font-weight: 800;
             margin: 0;
-            color: #111;
-            letter-spacing: -1px;
+            color: var(--stroke-dark);
+            letter-spacing: -0.5px;
         }
 
         .live-date {
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 700;
-            background: #111;
+            background: var(--stroke-dark);
             color: #fff;
             padding: 6px 16px;
-            border-radius: 4px;
+            border-radius: 2px;
             letter-spacing: 1px;
             text-transform: uppercase;
+            font-family: 'Special Elite', monospace;
+            border: 1.5px solid var(--stroke-dark);
         }
 
+        /* פריסה ראשית: צד שמאל הוא הגריד הצפוף, צד ימין הוא הסרגל הקבוע */
         .main-layout {
             display: grid;
             grid-template-columns: 1fr 400px;
-            gap: 40px;
+            gap: 30px;
             align-items: start;
         }
 
-        /* מרחב קולאז' פראי ועמוק עם חפיפות */
+        /* מערכת Grid אמיתית: מבטיחה תמיד 2 עד 3 פריטים בשורה ללא שטחים ריקים */
         .collage-workspace {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
             position: relative;
-            min-height: 4500px;
         }
 
-        /* בסיס לכל כרטיסיית קולאז' בסגנון פולרויד / עיתון גזור */
         .collage-card {
-            position: absolute;
             background: var(--polaroid-bg);
-            padding: 14px 14px 28px 14px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.18), 0 5px 15px rgba(0,0,0,0.08);
-            border: 1px solid #dcd4c0;
+            padding: 12px 12px 22px 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1), 0 2px 6px rgba(0,0,0,0.03);
+            border: 2px solid var(--stroke-dark);
             cursor: pointer;
-            width: 270px;
-            transition: z-index 0.2s;
+            transition: transform 0.2s;
+            position: relative;
         }
-        .collage-card:hover { z-index: 100 !important; }
+        .collage-card:hover { transform: translateY(-3px); }
 
-        /* סרטי הדבקה (Washi Tape) בפינות הכרטיסיות */
+        /* וושי טייפ מעודן */
         .collage-card::before {
             content: "";
             position: absolute;
-            top: -10px;
+            top: -9px;
             left: 50%;
-            transform: translateX(-50%) rotate(-2deg);
-            width: 70px;
-            height: 20px;
-            background: rgba(255, 235, 150, 0.85);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transform: translateX(-50%) rotate(-1.5deg);
+            width: 65px;
+            height: 18px;
+            background: rgba(230, 220, 195, 0.9);
+            border: 1px dashed #8a826d;
             z-index: 5;
         }
+        .tape-olive::before { background: rgba(95, 107, 85, 0.3) !important; }
+        .tape-terracotta::before { background: rgba(184, 93, 65, 0.3) !important; }
 
-        .tape-blue::before { background: rgba(147, 197, 253, 0.85) !important; transform: translateX(-50%) rotate(3deg) !important; }
-        .tape-pink::before { background: rgba(252, 165, 165, 0.85) !important; transform: translateX(-50%) rotate(-1deg) !important; }
-
-        /* פולרוידים של פנטון בעיצוב עיתונות ניאוני */
-        .pantone-polaroid {
+        .dog-ear {
+            position: relative;
+            background: linear-gradient(135deg, #fffdf9 50%, #f0ebd9 50%);
+        }
+        .dog-ear::after {
+            content: "";
             position: absolute;
-            background: var(--polaroid-bg);
-            padding: 10px 10px 20px 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-            border: 1px solid #dcd4c0;
+            top: 0;
+            right: 0;
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(225deg, #d8d0bc 50%, #fffdf9 50%);
+            box-shadow: -2px 2px 3px rgba(0,0,0,0.08);
+            border-bottom: 2px solid var(--stroke-dark);
+            border-left: 2px solid var(--stroke-dark);
+        }
+
+        .torn-paper-art-frame {
+            background: #fffdf9;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border: 2px solid var(--stroke-dark);
+            clip-path: polygon(0% 3%, 6% 0%, 12% 3%, 18% 0%, 24% 3%, 30% 0%, 36% 3%, 42% 0%, 48% 3%, 54% 0%, 60% 3%, 66% 0%, 72% 3%, 78% 0%, 84% 3%, 90% 0%, 96% 3%, 100% 0%, 98% 97%, 100% 100%, 94% 97%, 88% 100%, 82% 97%, 76% 100%, 70% 97%, 64% 100%, 58% 97%, 52% 100%, 46% 97%, 40% 100%, 34% 97%, 28% 100%, 22% 97%, 16% 100%, 10% 97%, 4% 100%, 0% 97%);
             cursor: pointer;
-            width: 110px;
+            grid-column: span 2; /* תופס את כל הרוחב ליצירת עניין */
+        }
+
+        /* פולרוידי צבעי HEX חמים מקובעים קבוע למעלה ימינה */
+        .pantone-fixed-group {
+            position: absolute;
+            top: 0px;
+            left: 500px;
+            display: flex;
+            gap: 12px;
+            z-index: 50;
+        }
+
+        .pantone-polaroid {
+            background: var(--polaroid-bg);
+            padding: 8px 8px 16px 8px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border: 2px solid var(--stroke-dark);
+            cursor: pointer;
+            width: 95px;
             text-align: center;
-            z-index: 10;
         }
 
         .pantone-swatch {
-            height: 80px;
-            border-radius: 2px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.15);
+            height: 65px;
+            border-radius: 1px;
+            border: 1.5px solid var(--stroke-dark);
         }
 
         .pantone-code {
             font-size: 10px;
             font-weight: 800;
-            color: #111;
-            margin-top: 8px;
+            color: var(--stroke-dark);
+            margin-top: 6px;
             font-family: 'Special Elite', monospace;
         }
 
-        /* מסגרת נייר קרוע אמנותית (Zine style) */
-        .torn-paper-art-frame {
+        .viral-sounds-section {
             position: absolute;
-            background: #fff;
-            padding: 35px 25px;
-            box-shadow: 0 20px 45px rgba(0,0,0,0.2);
-            border: none;
-            clip-path: polygon(0% 3%, 6% 0%, 12% 3%, 18% 0%, 24% 3%, 30% 0%, 36% 3%, 42% 0%, 48% 3%, 54% 0%, 60% 3%, 66% 0%, 72% 3%, 78% 0%, 84% 3%, 90% 0%, 96% 3%, 100% 0%, 98% 97%, 100% 100%, 94% 97%, 88% 100%, 82% 97%, 76% 100%, 70% 97%, 64% 100%, 58% 97%, 52% 100%, 46% 97%, 40% 100%, 34% 97%, 28% 100%, 22% 97%, 16% 100%, 10% 97%, 4% 100%, 0% 97%);
-            cursor: pointer;
-            width: 290px;
+            top: 155px;
+            left: 500px;
+            display: flex;
+            gap: 14px;
+            z-index: 50;
         }
 
+        .sound-circle {
+            width: 44px;
+            height: 44px;
+            background: var(--stroke-dark);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            border: 2px solid #fff;
+        }
+        .sound-circle:hover { transform: scale(1.1); background: var(--accent-terracotta); color: #fff; }
+
         .visual-box {
-            height: 170px;
+            height: 190px;
             background: var(--dark-card);
-            border-radius: 2px;
+            border-radius: 1px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #fff;
-            font-size: 28px;
+            font-size: 26px;
             overflow: hidden;
             position: relative;
-            border: 1px solid #333;
+            border: 2px solid var(--stroke-dark);
         }
 
         .badge-title {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            background: #ff3399;
+            top: 8px;
+            left: 8px;
+            background: var(--stroke-dark);
             color: #fff;
-            padding: 3px 8px;
-            font-size: 10px;
+            padding: 2px 6px;
+            font-size: 9px;
             font-weight: 800;
-            border-radius: 2px;
-            letter-spacing: 0.5px;
+            border-radius: 1px;
+            letter-spacing: 1px;
             text-transform: uppercase;
             font-family: 'Special Elite', monospace;
         }
@@ -181,11 +228,12 @@ def generate_html():
             margin-top: 10px;
             font-size: 13px;
             font-weight: 800;
-            font-family: 'Playfair Display', serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--stroke-dark);
         }
 
         .card-sub {
-            font-size: 10px;
+            font-size: 9px;
             color: #666;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -206,15 +254,15 @@ def generate_html():
             background: var(--dark-card);
             color: #fff;
             padding: 22px;
-            border-radius: 6px;
+            border-radius: 4px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-            border: 2px solid #333;
+            border: 2px solid var(--stroke-dark);
         }
 
         .preview-panel h4 {
             margin: 0 0 10px 0;
             font-size: 11px;
-            color: #ff3399;
+            color: #b85d41;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             font-family: 'Special Elite', monospace;
@@ -224,14 +272,14 @@ def generate_html():
             width: 100%;
             height: 260px;
             background: #000;
-            border-radius: 4px;
+            border-radius: 2px;
             overflow: hidden;
             margin-bottom: 12px;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid #444;
+            border: 2px solid #333;
         }
 
         .embedded-player-container iframe {
@@ -252,8 +300,8 @@ def generate_html():
             font-size: 16px;
             font-weight: bold;
             margin-bottom: 4px;
-            color: #ff3399;
-            font-family: 'Playfair Display', serif;
+            color: #b85d41;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         #preview-desc {
@@ -266,8 +314,8 @@ def generate_html():
         .links-box {
             background: #ffffff;
             padding: 22px;
-            border-radius: 6px;
-            border: 2px solid #111;
+            border-radius: 4px;
+            border: 2px solid var(--stroke-dark);
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
@@ -275,8 +323,8 @@ def generate_html():
             margin: 0 0 12px 0;
             font-size: 15px;
             font-weight: 900;
-            font-family: 'Playfair Display', serif;
-            border-bottom: 2px solid #eee;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            border-bottom: 2px solid var(--stroke-dark);
             padding-bottom: 8px;
         }
 
@@ -285,9 +333,9 @@ def generate_html():
             justify-content: space-between;
             align-items: center;
             padding: 8px 0;
-            border-bottom: 1px dashed #ddd;
+            border-bottom: 1px dashed #bbb;
             text-decoration: none;
-            color: #111;
+            color: var(--stroke-dark);
             font-size: 12px;
             font-weight: 700;
             cursor: pointer;
@@ -295,231 +343,222 @@ def generate_html():
         }
 
         .link-item:last-child { border-bottom: none; }
-        .link-item:hover { color: var(--accent-pink); }
+        .link-item:hover { color: var(--accent-terracotta); }
 
         .platform-tag {
             font-size: 9px;
-            background: #111;
+            background: var(--stroke-dark);
             padding: 2px 6px;
-            border-radius: 2px;
+            border-radius: 1px;
             color: #fff;
             text-transform: uppercase;
             font-family: 'Special Elite', monospace;
         }
 
-        .viral-sounds-section {
-            position: absolute;
-            top: 450px;
-            left: 5px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 50;
-        }
-
-        .sound-circle {
-            width: 55px;
-            height: 55px;
-            background: #111;
-            color: #ff3399;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-            cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
-            border: 2px solid #fff;
-        }
-        .sound-circle:hover { transform: scale(1.1); background: #ff3399; color: #fff; }
-
         .footer {
             grid-column: span 2;
             text-align: center;
             font-size: 11px;
-            color: #555;
-            margin-top: 150px;
-            border-top: 2px dashed #111;
+            color: var(--stroke-dark);
+            margin-top: 80px;
+            border-top: 2px dashed var(--stroke-dark);
             padding-top: 20px;
             font-family: 'Special Elite', monospace;
+            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
 
-    <div class="site-container">
+    <div class="site-container" style="position: relative;">
         
         <header class="board-header">
-            <h1>Shaked's Trend Radar</h1>
+            <h1>Trend Radar</h1>
             <div class="live-date">Updated: {TODAY_DATE}</div>
         </header>
+
+        <!-- פולרוידי צבעי HEX חמים מקובעים למעלה ימינה -->
+        <div class="pantone-fixed-group">
+            <div class="pantone-polaroid" style="transform: rotate(-1deg);" onclick="playEmbeddedMedia('info', '', 'Warm Terracotta: #B85D41', 'Primary organic autumn tone.')">
+                <div class="pantone-swatch" style="background-color: #b85d41;"></div>
+                <div class="pantone-code">#B85D41</div>
+            </div>
+            <div class="pantone-polaroid" style="transform: rotate(2deg);" onclick="playEmbeddedMedia('info', '', 'Soft Blush: #E3AAB1', 'Gentle secondary pastel tone.')">
+                <div class="pantone-swatch" style="background-color: #e3aab1;"></div>
+                <div class="pantone-code">#E3AAB1</div>
+            </div>
+            <div class="pantone-polaroid" style="transform: rotate(-2deg);" onclick="playEmbeddedMedia('info', '', 'Warm Olive Sage: #5F6B55', 'Earthy botanical tone.')">
+                <div class="pantone-swatch" style="background-color: #5f6b55;"></div>
+                <div class="pantone-code">#5F6B55</div>
+            </div>
+        </div>
+
+        <!-- אזור סאונדים -->
+        <div class="viral-sounds-section">
+            <div class="sound-circle" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Viral Audio: Ambient Design Flow', 'Top trending sound.')" title="Play Sound 1">🔊</div>
+            <div class="sound-circle" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'New Track: Midnight Echoes Remix', 'Underground track.')" title="Play Sound 2">🎵</div>
+            <div class="sound-circle" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Audio Trend: Spatial UX Podcast', 'Podcast audio.')" title="Play Sound 3">🎙️</div>
+        </div>
 
         <div class="main-layout">
             
             <div class="collage-workspace">
                 
-                <!-- שורה 1: חופפים באמנותיות עם סרטטי הדבקה -->
-                <div class="collage-card tape-blue" style="top: 0px; left: 15px; transform: rotate(-4deg); z-index: 3;" onclick="playEmbeddedMedia('tiktok', 'https://www.tiktok.com/embed/v2/7234567890', 'Going Viral Now: TikTok UI Motion', 'The absolute #1 trending short video format showcasing rapid Figma prototyping.')">
-                    <div class="visual-box" style="background: linear-gradient(135deg, #ff3399, #3b82f6);"><span class="badge-title">Going Viral</span>▶</div>
+                <!-- פריטים מסודרים בגריד צפוף (Grid) שמבטיח שלא יהיו שטחים מתים -->
+                
+                <div class="collage-card tape-olive dog-ear" onclick="playEmbeddedMedia('tiktok', 'https://www.tiktok.com/embed/v2/7234567890', 'TikTok UI Motion', 'Trending short video format.')">
+                    <div class="visual-box" style="background: #2c3e50;"><span class="badge-title">TikTok</span>▶</div>
                     <div class="card-caption">Neo-Brutalism UI Breakdown</div>
-                    <div class="card-sub">TikTok 24h Peak Trend</div>
+                    <div class="card-sub">TikTok Peak Trend</div>
                 </div>
 
-                <div class="collage-card tape-pink" style="top: 25px; left: 300px; transform: rotate(3deg); z-index: 4;" onclick="playEmbeddedMedia('instagram', 'https://www.instagram.com/p/C000000/embed', 'Hot Instagram Reels: Vogue Cover Drop', 'Behind-the-scenes editorial reel of the latest groundbreaking magazine cover.')">
-                    <div class="visual-box" style="background: #111;"><span class="badge-title">Hot IG</span>VOGUE</div>
+                <div class="collage-card tape-terracotta dog-ear" onclick="playEmbeddedMedia('instagram', 'https://www.instagram.com/p/C000000/embed', 'Vogue Cover Drop', 'Editorial magazine cover.')">
+                    <div class="visual-box" style="background: #111;"><span class="badge-title">Vogue</span>VOGUE</div>
                     <div class="card-caption">Vogue New Era Cover Drop</div>
-                    <div class="card-sub">Print & Editorial IG Reel</div>
+                    <div class="card-sub">Print & Editorial</div>
                 </div>
 
-                <!-- פולרוידי פנטון מעוצבים כגזרי עיתון -->
-                <div class="pantone-polaroid" style="top: 10px; left: 595px; transform: rotate(-2deg);" onclick="playEmbeddedMedia('info', '', 'Pantone 18-1443: Terracotta Ochre', 'Primary organic autumn tone driving luxury branding, packaging, and interior styling.')">
-                    <div class="pantone-swatch" style="background-color: #C86D51;"></div>
-                    <div class="pantone-code">PANTONE<br>C86D51</div>
-                </div>
-
-                <div class="pantone-polaroid" style="top: 10px; left: 715px; transform: rotate(4deg);" onclick="playEmbeddedMedia('info', '', 'Pantone 13-1404: Soft Blush Dust', 'Gentle secondary pastel tone for delicate UI backgrounds and editorial fashion editorials.')">
-                    <div class="pantone-swatch" style="background-color: #E3AAB1;"></div>
-                    <div class="pantone-code">PANTONE<br>E3AAB1</div>
-                </div>
-
-                <div class="pantone-polaroid" style="top: 10px; left: 835px; transform: rotate(-1deg);" onclick="playEmbeddedMedia('info', '', 'Pantone 17-0618: Warm Olive Sage', 'Earthy botanical tone bridging digital interfaces, nature, and architectural spaces.')">
-                    <div class="pantone-swatch" style="background-color: #8A9A86;"></div>
-                    <div class="pantone-code">PANTONE<br>8A9A86</div>
-                </div>
-
-                <!-- שורה 2 -->
-                <div class="collage-card tape-pink" style="top: 280px; left: 50px; transform: rotate(3deg); z-index: 5;" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Milan Fashion Week Highlights', 'Sculptural silhouettes and structured blazers dominating international runways.')">
-                    <div class="visual-box" style="background: linear-gradient(135deg, #8c6d62, #111);">🧥</div>
-                    <div class="card-caption">Milan Fashion Week Highlights</div>
+                <div class="collage-card tape-terracotta" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Milan Fashion Week', 'Runway highlights.')">
+                    <div class="visual-box" style="background: #8c6d62;"><span class="badge-title">Runway</span>🧥</div>
+                    <div class="card-caption">Milan Fashion Week Tailoring</div>
                     <div class="card-sub">Runway & Street Style</div>
                 </div>
 
-                <div class="collage-card tape-blue" style="top: 300px; left: 330px; transform: rotate(-2deg); z-index: 2;" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Digital Art Installation', 'Contemporary digital light installation exploring boundaries.')">
-                    <div class="visual-box" style="background: linear-gradient(135deg, #4a5d4e, #111);">🏛️</div>
-                    <div class="card-caption">Digital Art Installation</div>
-                    <div class="card-sub">Global Exhibition Drop</div>
+                <div class="collage-card tape-olive" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Digital Art', 'Light installation.')">
+                    <div class="visual-box" style="background: #4a5d4e;"><span class="badge-title">Exhibition</span>🏛️</div>
+                    <div class="card-caption">Immersive Digital Art Installation</div>
+                    <div class="card-sub">Global Exhibition</div>
                 </div>
 
-                <div class="collage-card" style="top: 260px; left: 610px; transform: rotate(2deg); z-index: 4;" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Sculptural Pistachio Tart Trend', 'Architectural pastry taking over food design feeds.')">
-                    <div class="visual-box" style="background: linear-gradient(135deg, #556b2f, #111);">🥐</div>
+                <div class="torn-paper-art-frame" onclick="playEmbeddedMedia('info', '', 'Print Archive', 'Analog print heritage.')">
+                    <div style="font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 18px; color: var(--stroke-dark); text-align: center;">
+                        Print Archive Feature
+                        <div style="font-size: 10px; font-weight: normal; font-family: 'Special Elite', monospace; color: #666; margin-top: 4px;">Analog Print Curation</div>
+                    </div>
+                    <div class="card-caption" style="margin-top: 8px;">Ripped Paper Print Asset</div>
+                    <div class="card-sub">High Vertical Layout</div>
+                </div>
+
+                <div class="collage-card tape-terracotta dog-ear" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Pastry Art', 'Sculptural pistachio tart.')">
+                    <div class="visual-box" style="background: #556b2f;"><span class="badge-title">Culinary</span>🥐</div>
                     <div class="card-caption">Sculptural Pistachio Tart Art</div>
                     <div class="card-sub">Culinary Social Trend</div>
                 </div>
 
-                <!-- שורה 3: מסגרת נייר קרוע -->
-                <div class="torn-paper-art-frame" style="top: 550px; left: 20px; transform: rotate(-2deg); z-index: 6;" onclick="playEmbeddedMedia('info', '', 'Print Archive: Ripped Paper Edition', 'Custom artistic ripped paper frame bridging analog print heritage with modern curation.')">
-                    <div style="height: 150px; display: flex; flex-direction: column; justify-content: center; font-family: 'Playfair Display', serif; font-style: italic; font-size: 21px; color: #111; text-align: center;">
-                        Print Archive Feature
-                        <span style="font-size: 11px; font-style: normal; font-family: 'Special Elite', monospace; color: #555; margin-top: 8px;">Zine Culture & Typography</span>
-                    </div>
-                    <div class="card-caption" style="margin-top: 15px;">Expanded Ripped Paper Asset</div>
-                    <div class="card-sub">High Vertical Layout</div>
-                </div>
-
-                <div class="collage-card tape-blue" style="top: 580px; left: 340px; transform: rotate(1.5deg); z-index: 4;" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', '3D Surrealist Sculptures', 'New digital sculptures exploring organic textures.')">
-                    <div class="visual-box" style="background: linear-gradient(135deg, #7b1fa2, #111);">🎨</div>
-                    <div class="card-caption">Surrealist 3D Sculptures</div>
+                <div class="collage-card tape-olive dog-ear" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', '3D Sculptures', 'Surrealist textures.')">
+                    <div class="visual-box" style="background: #7b1fa2;"><span class="badge-title">3D Art</span>🎨</div>
+                    <div class="card-caption">Surrealist 3D Organic Textures</div>
                     <div class="card-sub">Artist Spotlight</div>
                 </div>
 
-                <div class="collage-card tape-pink" style="top: 560px; left: 620px; transform: rotate(-3deg); z-index: 5;" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Brutalist Interior Spaces', 'Raw concrete and warm wood interiors.')">
-                    <div class="visual-box" style="background: linear-gradient(135deg, #37474f, #111);">🏠</div>
-                    <div class="card-caption">Brutalist Interior Spaces</div>
+                <div class="collage-card tape-terracotta" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Brutalist Living', 'Raw concrete interior.')">
+                    <div class="visual-box" style="background: #37474f;"><span class="badge-title">Interior</span>🏠</div>
+                    <div class="card-caption">Brutalist Concrete & Wood</div>
                     <div class="card-sub">Architecture & Living</div>
                 </div>
 
-                <!-- שורה 4 -->
-                <div class="collage-card tape-pink" style="top: 870px; left: 40px; transform: rotate(-1deg); z-index: 3;" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Kinetic Typography Reel', 'Fluid motion graphics and rhythmic typography.')">
-                    <div class="visual-box" style="background: linear-gradient(135deg, #ff6f00, #111);">🎞️</div>
-                    <div class="card-caption">Kinetic Typography Reel</div>
+                <div class="torn-paper-art-frame" onclick="playEmbeddedMedia('info', '', 'Zine Cutout', 'Alternative press layout.')">
+                    <div style="font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 18px; color: var(--stroke-dark); text-align: center;">
+                        Zine & Press Cutout
+                        <div style="font-size: 10px; font-weight: normal; font-family: 'Special Elite', monospace; color: #666; margin-top: 4px;">Alternative Press Curation</div>
+                    </div>
+                    <div class="card-caption" style="margin-top: 8px;">Alternative Cutout Asset</div>
+                    <div class="card-sub">Zine Layout Edition</div>
+                </div>
+
+                <div class="collage-card tape-olive dog-ear" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Motion Reel', 'Kinetic typography.')">
+                    <div class="visual-box" style="background: #ff6f00;"><span class="badge-title">Motion</span>🎞️</div>
+                    <div class="card-caption">Kinetic Typography Motion Reel</div>
                     <div class="card-sub">Motion & Animation</div>
                 </div>
 
-                <div class="collage-card tape-blue" style="top: 890px; left: 320px; transform: rotate(2.5deg); z-index: 4;" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Tactile Eco-Packaging', 'Eco-friendly luxury branding with embossed typography.')">
-                    <div class="visual-box" style="background: linear-gradient(135deg, #004d40, #111);">🧴</div>
+                <div class="collage-card tape-terracotta" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Eco-Packaging', 'Tactile eco branding.')">
+                    <div class="visual-box" style="background: #004d40;"><span class="badge-title">Branding</span>🧴</div>
                     <div class="card-caption">Tactile Eco-Packaging</div>
                     <div class="card-sub">Behance Branding Trend</div>
                 </div>
 
-                <div class="collage-card" style="top: 860px; left: 600px; transform: rotate(-2deg); z-index: 2;" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Spatial UX & Bezi 3D', 'Immersive 3D interfaces and volumetric windows.')">
-                    <div class="visual-box" style="background: linear-gradient(135deg, #311b92, #111);">🥽</div>
-                    <div class="card-caption">Spatial UX & Bezi 3D</div>
+                <div class="collage-card tape-olive dog-ear" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Spatial UX', 'Bezi volumetric 3D.')">
+                    <div class="visual-box" style="background: #311b92;"><span class="badge-title">Spatial</span>🥽</div>
+                    <div class="card-caption">Spatial UX & Bezi Volumetric</div>
                     <div class="card-sub">Immersive Technology</div>
                 </div>
 
-                <!-- שורה 5: מסגרת נייר קרוע שנייה -->
-                <div class="collage-card tape-blue" style="top: 1140px; left: 30px; transform: rotate(2deg); z-index: 4;" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Analog Album Art Design', 'Grainy film photography with Swiss typography.')">
-                    <div class="visual-box" style="background: linear-gradient(135deg, #b71c1c, #111);">🎵</div>
-                    <div class="card-caption">Analog Album Art Design</div>
+                <div class="collage-card tape-terracotta dog-ear" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Album Art', 'Analog grainy film.')">
+                    <div class="visual-box" style="background: #b71c1c;"><span class="badge-title">Music</span>🎵</div>
+                    <div class="card-caption">Analog Album Art & Swiss Design</div>
                     <div class="card-sub">Music & Visual Culture</div>
                 </div>
 
-                <div class="collage-card tape-pink" style="top: 1160px; left: 310px; transform: rotate(-2.5deg); z-index: 3;" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Handmade Studio Pottery', 'Hand-thrown ceramics featuring raw stoneware.')">
-                    <div class="visual-box" style="background: linear-gradient(135deg, #e65100, #111);">🏺</div>
+                <div class="collage-card tape-olive" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Studio Pottery', 'Handmade stoneware.')">
+                    <div class="visual-box" style="background: #e65100;"><span class="badge-title">Craft</span>🏺</div>
                     <div class="card-caption">Handmade Studio Pottery</div>
                     <div class="card-sub">Craft & Object Design</div>
                 </div>
 
-                <div class="torn-paper-art-frame" style="top: 1120px; left: 590px; transform: rotate(1.5deg); z-index: 6;" onclick="playEmbeddedMedia('info', '', 'Print Archive: Right Wing Edition', 'Balanced vertical print asset maintaining layout harmony.')">
-                    <div style="height: 140px; display: flex; flex-direction: column; justify-content: center; font-family: 'Playfair Display', serif; font-style: italic; font-size: 20px; color: #111; text-align: center;">
-                        Editorial Balance
-                        <span style="font-size: 11px; font-style: normal; font-family: 'Special Elite', monospace; color: #555; margin-top: 6px;">Symmetrical Print Element</span>
-                    </div>
-                    <div class="card-caption" style="margin-top: 12px;">Right Balance Ripped Asset</div>
-                    <div class="card-sub">Vertical Symmetry</div>
-                </div>
-
-                <!-- שורה 6 -->
-                <div class="collage-card tape-pink" style="top: 1430px; left: 50px; transform: rotate(-3deg); z-index: 5;" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Molten Silver Jewelry', 'Organic silver pieces inspired by fluid water forms.')">
-                    <div class="visual-box" style="background: linear-gradient(135deg, #424242, #111);">💍</div>
-                    <div class="card-caption">Molten Silver Jewelry</div>
+                <div class="collage-card tape-terracotta dog-ear" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Silver Jewelry', 'Molten fluid forms.')">
+                    <div class="visual-box" style="background: #424242;"><span class="badge-title">Accessory</span>💍</div>
+                    <div class="card-caption">Molten Silver Jewelry Trends</div>
                     <div class="card-sub">Accessory Trend Watch</div>
                 </div>
 
-                <div class="collage-card tape-blue" style="top: 1410px; left: 330px; transform: rotate(2deg); z-index: 3;" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Tokyo Concept Store Retail', 'Concrete walls and floating clothing racks.')">
-                    <div class="visual-box" style="background: linear-gradient(135deg, #263238, #111);">🏬</div>
-                    <div class="card-caption">Tokyo Concept Store Retail</div>
+                <div class="collage-card tape-olive" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Retail Space', 'Tokyo concept store.')">
+                    <div class="visual-box" style="background: #263238;"><span class="badge-title">Retail</span>🏬</div>
+                    <div class="card-caption">Tokyo Concept Store Architecture</div>
                     <div class="card-sub">Interior & Spatial Design</div>
                 </div>
 
-                <!-- שורה 7 -->
-                <div class="collage-card tape-blue" style="top: 1700px; left: 20px; transform: rotate(2.5deg); z-index: 4;" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Bio-Design Footwear', 'Futuristic footwear crafted from mycelium and algae composites.')">
-                    <div class="visual-box" style="background: linear-gradient(135deg, #33691e, #111);">👟</div>
-                    <div class="card-caption">Bio-Design Footwear Trends</div>
-                    <div class="card-sub">Sustainable Fashion</div>
-                </div>
-
-                <div class="collage-card tape-pink" style="top: 1680px; left: 300px; transform: rotate(-2deg); z-index: 3;" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Editorial Grid Breaking', 'Asymmetrical layouts and overlapping typography in indie zines.')">
-                    <div class="visual-box" style="background: linear-gradient(135deg, #b71c1c, #111);">📰</div>
-                    <div class="card-caption">Indie Zine Grid Breaking</div>
-                    <div class="card-sub">Editorial Print Design</div>
-                </div>
-
-                <div class="collage-card" style="top: 1710px; left: 590px; transform: rotate(1deg); z-index: 5;" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'AI Generative Textiles', 'Algorithmic fabric patterns generated via generative AI tools.')">
-                    <div class="visual-box" style="background: linear-gradient(135deg, #880e4f, #111);">🧵</div>
-                    <div class="card-caption">AI Generative Textiles</div>
+                <div class="collage-card tape-olive dog-ear" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'AI Textiles', 'Algorithmic fabric patterns.')">
+                    <div class="visual-box" style="background: #880e4f;"><span class="badge-title">AI Tech</span>🧵</div>
+                    <div class="card-caption">AI Generative Fabric & Textiles</div>
                     <div class="card-sub">Tech & Fashion Fusion</div>
                 </div>
 
-                <div class="viral-sounds-section">
-                    <div class="sound-circle" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Viral Audio: Ambient Design Flow', 'Top trending sound on TikTok & IG Reels.')" title="Play Sound 1">🔊</div>
-                    <div class="sound-circle" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'New Track: Midnight Echoes Remix', 'Underground electronic track.')" title="Play Sound 2">🎵</div>
-                    <div class="sound-circle" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Audio Trend: Spatial UX Podcast', 'Hot discussion on future spatial computing.')" title="Play Sound 3">🎙️</div>
+                <div class="collage-card tape-terracotta" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Bio-Design', 'Mycelium footwear.')">
+                    <div class="visual-box" style="background: #33691e;"><span class="badge-title">Bio-Design</span>👟</div>
+                    <div class="card-caption">Mycelium Sustainable Footwear</div>
+                    <div class="card-sub">Sustainable Fashion</div>
+                </div>
+
+                <div class="torn-paper-art-frame" onclick="playEmbeddedMedia('info', '', 'Vanguard Print', 'Advanced layout.')">
+                    <div style="font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 18px; color: var(--stroke-dark); text-align: center;">
+                        Vanguard Print Edition
+                        <div style="font-size: 10px; font-weight: normal; font-family: 'Special Elite', monospace; color: #666; margin-top: 4px;">Future Print Curation</div>
+                    </div>
+                    <div class="card-caption" style="margin-top: 8px;">Vanguard Print Asset</div>
+                    <div class="card-sub">Deep Archive Layout</div>
+                </div>
+
+                <div class="collage-card tape-olive dog-ear" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Cyberpunk UI', 'Futuristic interfaces.')">
+                    <div class="visual-box" style="background: #0f172a;"><span class="badge-title">Cyber UI</span>💻</div>
+                    <div class="card-caption">Cyberpunk Spatial UI Motion</div>
+                    <div class="card-sub">Interface Architecture</div>
+                </div>
+
+                <div class="collage-card tape-terracotta dog-ear" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Glass Vases', 'Iridescent glass blowing.')">
+                    <div class="visual-box" style="background: #006064;"><span class="badge-title">Glass</span>🔮</div>
+                    <div class="card-caption">Iridescent Blown Glass Vases</div>
+                    <div class="card-sub">Craft & Materiality</div>
+                </div>
+
+                <div class="collage-card tape-olive" onclick="playEmbeddedMedia('youtube', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'Swiss Posters', 'Expressive grid layouts.')">
+                    <div class="visual-box" style="background: #1b5e20;"><span class="badge-title">Swiss Grid</span>🔤</div>
+                    <div class="card-caption">Distorted Swiss Grid Posters</div>
+                    <div class="card-sub">Graphic Design Archive</div>
                 </div>
 
             </div>
 
             <div class="sidebar-side">
                 <div class="preview-panel">
-                    <h4>🔍 Live Pantone & Media Studio</h4>
+                    <h4>🔍 Live Media Studio</h4>
                     
                     <div class="embedded-player-container" id="player-box">
-                        <div class="default-player-placeholder">Click any item or Pantone swatch to inspect in-site</div>
+                        <div class="default-player-placeholder">Click any item or color swatch to inspect in-site</div>
                     </div>
 
                     <div id="preview-title">Select an item</div>
-                    <p id="preview-desc">Color inspiration, pantone codes, and media previews will appear here instantly.</p>
+                    <p id="preview-desc">Color inspiration, hex codes, and media previews will appear here instantly.</p>
                 </div>
 
                 <div class="links-box">
@@ -546,7 +585,7 @@ def generate_html():
         </div>
 
         <footer class="footer">
-            Shaked's Trend Radar &bull; Zine & Collage Aesthetic Edition
+            Trend Radar &bull; Ultimate Grid Collage Edition
         </footer>
 
     </div>
@@ -560,7 +599,7 @@ def generate_html():
             if (mediaUrl && mediaUrl !== '') {
                 playerBox.innerHTML = `<iframe src="${mediaUrl}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
             } else {
-                playerBox.innerHTML = `<div class="default-player-placeholder" style="background:#111; color:#ff3399; font-family:'Special Elite',monospace; font-size:14px; padding:20px; text-align:center;">✨ Pantone Color Inspiration Loaded Successfully</div>`;
+                playerBox.innerHTML = `<div class="default-player-placeholder" style="background:#2b2b2b; color:#b85d41; font-family:'Special Elite',monospace; font-size:14px; padding:20px; text-align:center;">✨ Warm Hex Color Loaded Successfully</div>`;
             }
         }
     </script>
@@ -572,7 +611,7 @@ def generate_html():
     
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(final_html)
-    print("✨ קובץ ה-index.html עודכן בהצלחה עם סגנון קולאז' עיתונות, סרטי הדבקה וטקסטורות Zine!")
+    print("✨ קובץ ה-index.html עודכן בהצלחה עם פריסת Grid אמיתית וחכמה שמבטיחה שלא יהיו שטחים מתים בשום מצב!")
 
 if __name__ == "__main__":
     generate_html()
