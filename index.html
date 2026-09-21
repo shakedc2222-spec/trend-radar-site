@@ -424,6 +424,7 @@
 
     </div>
 
+    <script src="daily-engine.js"></script>
     <script>
         // מאגר פרויקטים וסרטונים עדכניים מעולמות העיצוב (2026) מובנה ישירות למניעת שגיאות טעינה
         const masterPool = [
@@ -451,43 +452,41 @@
             { text: '📌 DESIGN TRENDS 2026', colorClass: 'yellow-bg', top: 1280, left: 240, rot: -1 }
         ];
 
-        function getDailyShuffledItems() {
-            const today = new Date();
-            const dateString = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
-            
-            let seed = 0;
-            for (let i = 0; i < dateString.length; i++) {
-                seed += dateString.charCodeAt(i);
-            }
+        // ───────── מנוע יומי (הלוגיקה כולה ב-daily-engine.js) ─────────
+        // מאגר חירום בלבד (אם video-pool.json לא קיים/לא נטען). כדי שהסרטונים לא יחזרו - הריצו update_site.py.
+        const fallbackVideos = ['5qap5aO4i9A', 'L_LUpnjgPso', 'kJQP7kiw5Fk', '9bZkp7q19f0'].map(id => ({ id }));
 
-            let shuffled = [...masterPool];
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                seed = (seed * 9301 + 49297) % 233280;
-                const rnd = seed / 233280;
-                const j = Math.floor(rnd * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-            }
-            return shuffled;
-        }
-
-        function buildArtisticCollage() {
+        async function buildArtisticCollage() {
             const workspace = document.getElementById('collage-workspace');
+            // ‎?date=2026-10-01 בכתובת = תצוגה מקדימה של כל יום (לבדיקות)
+            const dateOpts = { date: new URLSearchParams(location.search).get('date') };
+
+            const data = await DailyEngine.load({
+                ...dateOpts,
+                contentUrl: 'trends-data.json',
+                videoUrl: 'video-pool.json',
+                fallbackContent: masterPool,
+                fallbackVideos
+            });
+            const day = DailyEngine.compose(data, { ...dateOpts, count: 16, width: 750, labels: floatingLabels });
+
             workspace.innerHTML = ""; // ניקוי אזור העבודה
+            workspace.style.height = day.height + 'px'; // במובייל ה-CSS דורס עם !important
 
             const options = { month: 'short', day: 'numeric', year: 'numeric' };
-            const formattedDate = new Date().toLocaleDateString('en-US', options);
-            document.getElementById('live-date').innerText = formattedDate;
+            document.getElementById('live-date').innerText =
+                new Date(day.dateKey + 'T12:00:00').toLocaleDateString('en-US', options);
 
-            const todayItems = getDailyShuffledItems();
+            const todayItems = day.items;
 
             todayItems.forEach((item) => {
                 const card = document.createElement('div');
                 const layerClass = item.layer === 'top' ? 'layer-top' : 'layer-background';
                 card.className = `collage-card ${item.styleClass} ${layerClass}`;
                 
-                card.style.top = `${item.top}px`;
-                card.style.left = `${item.left}px`;
-                card.style.transform = `rotate(${item.rot}deg)`;
+                card.style.top = `${item.pos.top}px`;
+                card.style.left = `${item.pos.left}px`;
+                card.style.transform = `rotate(${item.pos.rot}deg)`;
 
                 card.onclick = () => {
                     inspectItem(item.title, item.sub, item.videoUrl);
@@ -511,7 +510,7 @@
                     visualContent = `
                         <div class="visual-box" style="height: ${item.height}px;">
                             <span class="badge-title">${item.badge}</span>
-                            <iframe src="${item.videoUrl}" allow="autoplay"></iframe>
+                            <iframe src="${item.videoUrl}" allow="autoplay" loading="lazy"></iframe>
                             ${item.overlayText ? `<div class="tiktok-overlay-tags">${item.overlayText}</div>` : ''}
                         </div>
                     `;
@@ -546,7 +545,7 @@
                 workspace.appendChild(card);
             });
 
-            floatingLabels.forEach(label => {
+            day.labels.forEach(label => {
                 const tag = document.createElement('div');
                 tag.className = `floating-label-tag ${label.colorClass}`;
                 tag.style.top = `${label.top}px`;
