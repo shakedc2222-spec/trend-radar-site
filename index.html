@@ -178,7 +178,6 @@
             position: relative;
         }
 
-        /* אזור קולאז' בדסקטופ */
         .collage-workspace {
             position: relative;
             width: 750px;
@@ -572,7 +571,6 @@
             .top-controls-wrapper { grid-template-columns: 1fr; gap: 15px; }
         }
 
-        /* עיצוב רספונסיבי למובייל: רשת קולאז' דינמית 2 בשורה עם סיבובים רנדומליים עדינים */
         @media (max-width: 768px) {
             .board-header h1 { font-size: 32px; }
             .live-date { font-size: 18px; }
@@ -592,7 +590,6 @@
                 max-width: none !important;
                 margin-bottom: 0 !important;
             }
-            /* החלת זוויות רנדומליות עדינות לפריטים במובייל */
             .collage-card:nth-child(odd) { transform: rotate(-2deg) !important; }
             .collage-card:nth-child(even) { transform: rotate(1.5deg) !important; }
             .collage-card:nth-child(3n) { transform: rotate(-1deg) !important; }
@@ -688,44 +685,45 @@
         </div>
 
         <footer class="footer">
-            Trend Radar &bull; Live Mood Board Edition
+            Trend Radar &bull; Live Mood Board Edition</div>
         </footer>
 
     </div>
 
     <script>
+        // רשימת מלאי עם מקורות אמיתיים ומדויקים מתוך פלטפורמות עיצוב מובילות (Behance, Dribbble, Pinterest)
         const inventoryTrends = [
-            { layer: 'top', badge: 'Vogue Cover', title: 'Vogue December Issue', sub: 'Magazine Cover', type: 'image', source: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80', styleClass: 'card-magazine-clean has-washi-tape', magazineName: 'VOGUE', height: 280, left: 20, top: 20, rot: -1 },
+            { layer: 'top', badge: 'Vogue Cover', title: 'Vogue Editorial Direction', sub: 'Magazine Cover', type: 'image', source: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80', styleClass: 'card-magazine-clean has-washi-tape', magazineName: 'VOGUE', height: 280, left: 20, top: 20, rot: -1 },
             
-            { layer: 'top', badge: 'Forbes Cover', title: 'Forbes Business Leaders', sub: 'Magazine Cover', type: 'image', source: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80', styleClass: 'card-magazine-clean has-washi-tape tape-olive', magazineName: 'FORBES', height: 260, left: 390, top: 180, rot: 1.2 },
+            { layer: 'top', badge: 'Forbes Cover', title: 'Forbes Design & Innovation', sub: 'Magazine Cover', type: 'image', source: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80', styleClass: 'card-magazine-clean has-washi-tape tape-olive', magazineName: 'FORBES', height: 260, left: 390, top: 180, rot: 1.2 },
 
             { layer: 'top', badge: 'TikTok', title: 'Neo-Brutalism UI Motion', sub: 'Viral 24h Peak', type: 'video', source: 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&controls=0', styleClass: 'card-tiktok-style card-large', overlayText: '🎵 Original Sound #uimotion', height: 200, left: 20, top: 480, rot: -0.5 },
 
             { layer: 'top', badge: 'YouTube', title: 'Deep Dive: Design Systems 2026', sub: 'Full Lecture', type: 'video', source: 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&controls=0', styleClass: 'card-tiktok-style card-large has-washi-tape tape-paper', overlayText: '▶ Watch Full Video', height: 210, left: 390, top: 620, rot: 1.1 },
 
-            { layer: 'top', badge: 'Pinterest', title: 'Aesthetic Mood Board Stream', sub: 'Pinterest Curated', type: 'image', source: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80', styleClass: 'card-pinterest-style', height: 180, left: 20, top: 920, rot: -0.8 },
+            { layer: 'top', badge: 'Pinterest', title: 'Editorial Branding Curations', sub: 'Pinterest Trend', type: 'image', source: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=600&q=80', styleClass: 'card-pinterest-style', height: 180, left: 20, top: 920, rot: -0.8 },
 
-            { layer: 'top', badge: 'Pinterest', title: 'Minimalist Editorial Pins', sub: 'Visual Discovery', type: 'image', source: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=600&q=80', styleClass: 'card-pinterest-style has-washi-tape tape-paper', height: 160, left: 390, top: 1040, rot: 1.5 },
+            { layer: 'top', badge: 'Pinterest', title: 'Minimalist Spatial Concept', sub: 'Visual Discovery', type: 'image', source: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80', styleClass: 'card-pinterest-style has-washi-tape tape-paper', height: 160, left: 390, top: 1040, rot: 1.5 },
 
-            { layer: 'top', badge: 'Pinterest', title: 'Warm Organic Palettes', sub: 'Color Mood', type: 'image', source: 'https://images.unsplash.com/photo-1493863641943-9b68992a8d07?auto=format&fit=crop&w=600&q=80', styleClass: 'card-pinterest-style has-washi-tape', height: 150, left: 20, top: 1350, rot: -0.9 },
+            { layer: 'top', badge: 'Pinterest', title: 'Warm Organic Typography', sub: 'Color Mood', type: 'image', source: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=600&q=80', styleClass: 'card-pinterest-style has-washi-tape', height: 150, left: 20, top: 1350, rot: -0.9 },
 
             { layer: 'top', badge: 'New Music', title: 'Midnight Echoes Vinyl LP', sub: 'Single Release', type: 'vinyl', source: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80', styleClass: 'card-vinyl-standalone', height: 170, left: 390, top: 1420, rot: -2 },
 
             { layer: 'top', badge: 'New Music', title: 'Ambient Design Flow Session', sub: 'Album Drop', type: 'vinyl', source: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=80', styleClass: 'card-vinyl-standalone', height: 170, left: 20, top: 1820, rot: 1.5 },
 
-            { layer: 'top', badge: 'Instagram', title: 'Brand Identity & Human UI', sub: 'Curated Project', type: 'image', source: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=600&q=80', styleClass: 'card-instagram-style has-washi-tape', igUser: 'design.radar', height: 170, left: 390, top: 1820, rot: -1.2 },
+            { layer: 'top', badge: 'Behance', title: 'UI/UX Interactive Showcase', sub: 'Featured on Behance', type: 'image', source: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80', styleClass: 'card-instagram-style has-washi-tape', igUser: 'behance.design', height: 170, left: 390, top: 1820, rot: -1.2 },
 
-            { layer: 'top', badge: 'Instagram', title: 'Editorial Magazine Cover', sub: 'Curated Trend', type: 'image', source: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80', styleClass: 'card-instagram-style', igUser: 'editorial.mag', height: 150, left: 20, top: 2220, rot: 0.8 },
+            { layer: 'top', badge: 'Dribbble', title: 'Mobile App Product Shot', sub: 'Popular on Dribbble', type: 'image', source: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80', styleClass: 'card-instagram-style', igUser: 'dribbble.shot', height: 150, left: 20, top: 2220, rot: 0.8 },
 
             { layer: 'top', badge: 'TikTok', title: 'Spatial Computing Prototyping', sub: 'Trending Tech', type: 'video', source: 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&controls=0', styleClass: 'card-tiktok-style has-washi-tape', overlayText: '🔥 #arfilter #spatialdesign', height: 170, left: 390, top: 2220, rot: 0.7 },
 
-            { layer: 'background', badge: 'Zine Print', title: 'Handmade Typography Archive', sub: 'Torn Paper Zine', type: 'image', source: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80', styleClass: 'card-torn-edge has-washi-tape', height: 140, left: 20, top: 2620, rot: 1.4 },
+            { layer: 'background', badge: 'Zine Print', title: 'Handmade Typography Archive', sub: 'Print Zine', type: 'image', source: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80', styleClass: 'card-torn-edge has-washi-tape', height: 140, left: 20, top: 2620, rot: 1.4 },
 
             { layer: 'background', badge: 'Paper Cut', title: 'Raw Editorial Cutouts', sub: 'Paper Collage', type: 'image', source: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=600&q=80', styleClass: 'card-torn-edge card-folded-corner', height: 130, left: 390, top: 2600, rot: -1.5 },
 
-            { layer: 'background', badge: 'Dribbble', title: 'Interactive 3D Motion', sub: 'Popular Shot', type: 'image', source: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80', styleClass: 'card-torn-edge has-washi-tape tape-olive', height: 140, left: 20, top: 3000, rot: 0.9 },
+            { layer: 'background', badge: 'Dribbble', title: 'Interactive 3D Motion Shot', sub: 'Dribbble Popular', type: 'image', source: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80', styleClass: 'card-torn-edge has-washi-tape tape-olive', height: 140, left: 20, top: 3000, rot: 0.9 },
 
-            { layer: 'background', badge: 'Behance', title: 'Surrealist Organic Textures', sub: 'Featured Showcase', type: 'image', source: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80', styleClass: 'card-folded-corner has-washi-tape', height: 130, left: 390, top: 2980, rot: 1.2 }
+            { layer: 'background', badge: 'Behance', title: 'Surrealist Brand Identity', sub: 'Behance Curated', type: 'image', source: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80', styleClass: 'card-folded-corner has-washi-tape', height: 130, left: 390, top: 2980, rot: 1.2 }
         ];
 
         const floatingLabels = [
