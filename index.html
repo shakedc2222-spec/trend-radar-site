@@ -421,7 +421,6 @@
     </div>
 
     <script>
-        // מגזינים, תקליטים ותכנים מדויקים ואמיתיים לכל קטגוריה
         const fallbackContent = [
             { layer: 'top', badge: 'Vogue Cover', title: 'Vogue Editorial September Issue', sub: 'Magazine Cover', type: 'image', source: 'https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&w=600&q=80', styleClass: 'card-magazine-clean has-washi-tape', magazineName: 'VOGUE', height: 280 },
             { layer: 'top', badge: 'Forbes Cover', title: 'Forbes Business & Tech Leaders', sub: 'Magazine Cover', type: 'image', source: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80', styleClass: 'card-magazine-clean has-washi-tape tape-olive', magazineName: 'FORBES', height: 260 },
@@ -489,9 +488,10 @@
                 card.style.left = `${item.pos.left}px`;
                 card.style.transform = `rotate(${item.pos.rot}deg)`;
 
+                // וידוא שהלחיצה מעבירה את הכותרת, התיאור והמדיה הספציפיים של הכרטיסייה הזו בדיוק
                 const activeVideo = item.videoUrl || 'https://www.youtube.com/embed/5qap5aO4i9A';
                 card.onclick = () => {
-                    inspectItem(item.title, item.sub || 'Trend Item', activeVideo);
+                    inspectItem(item.title, item.sub || item.badge || 'Trend Item', activeVideo);
                 };
 
                 let visualContent = '';
