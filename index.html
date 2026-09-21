@@ -334,6 +334,7 @@
 <body>
 
     <div class="site-container">
+        
         <header class="board-header">
             <h1>Trend Radar</h1>
             <div class="header-right-side">
@@ -343,6 +344,7 @@
         </header>
 
         <div class="main-layout">
+            
             <div class="downloadable-board-area" id="capture-container">
                 <div class="top-controls-wrapper" style="margin-bottom: 20px;">
                     <div class="control-group">
@@ -377,16 +379,18 @@
                 </div>
 
                 <div class="collage-workspace" id="collage-workspace">
-                    <!-- נטען אוטומטית מקובץ הנתונים החי -->
+                    <!-- יופקו דינמית על ידי אלגוריתם ה-Seed היומי -->
                 </div>
             </div>
 
             <div class="sidebar-side">
                 <div class="preview-panel">
                     <h4>Live Media Studio</h4>
+                    
                     <div class="embedded-player-container" id="player-box">
                         <div class="default-player-placeholder">Click any item or live video card to inspect in-site</div>
                     </div>
+
                     <div id="preview-title">Select an item</div>
                     <p id="preview-desc">Color inspiration, hex codes, and live media previews will appear here instantly.</p>
                 </div>
@@ -411,128 +415,146 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
         <footer class="footer">
             Trend Radar &bull; Live Mood Board Edition
         </footer>
+
     </div>
 
     <script>
+        // מאגר פרויקטים וסרטונים עדכניים מעולמות העיצוב (2026) מובנה ישירות למניעת שגיאות טעינה
+        const masterPool = [
+            { layer: 'top', badge: 'Vogue Cover', title: 'Vogue Editorial Direction 2026', sub: 'Magazine Cover', type: 'image', source: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/5qap5aO4i9A', styleClass: 'card-magazine-clean has-washi-tape', magazineName: 'VOGUE', height: 280, left: 20, top: 20, rot: -1 },
+            { layer: 'top', badge: 'Forbes Cover', title: 'Forbes Design & AI Innovation', sub: 'Magazine Cover', type: 'image', source: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/L_LUpnjgPso', styleClass: 'card-magazine-clean has-washi-tape tape-olive', magazineName: 'FORBES', height: 260, left: 390, top: 180, rot: 1.2 },
+            { layer: 'top', badge: 'TikTok', title: 'Spatial Computing & AR UI Trends', sub: 'Viral 24h Peak', type: 'video', source: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/kJQP7kiw5Fk', styleClass: 'card-tiktok-style card-large', overlayText: '🎵 Spatial UI #arfilter', height: 200, left: 20, top: 480, rot: -0.5 },
+            { layer: 'top', badge: 'YouTube', title: 'Future of UI/UX: Design Systems 2026', sub: 'Keynote Lecture', type: 'video', source: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/9bZkp7q19f0', styleClass: 'card-tiktok-style card-large has-washi-tape tape-paper', overlayText: '▶ Watch Keynote 2026', height: 210, left: 390, top: 620, rot: 1.1 },
+            { layer: 'top', badge: 'Pinterest', title: 'Editorial Branding Curations 2026', sub: 'Pinterest Trend', type: 'image', source: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/5qap5aO4i9A', styleClass: 'card-pinterest-style', height: 180, left: 20, top: 920, rot: -0.8 },
+            { layer: 'top', badge: 'Pinterest', title: 'Minimalist Spatial Architecture', sub: 'Visual Discovery', type: 'image', source: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/L_LUpnjgPso', styleClass: 'card-pinterest-style has-washi-tape tape-paper', height: 160, left: 390, top: 1040, rot: 1.5 },
+            { layer: 'top', badge: 'Pinterest', title: 'Warm Organic Typography Systems', sub: 'Color Mood', type: 'image', source: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/kJQP7kiw5Fk', styleClass: 'card-pinterest-style has-washi-tape', height: 150, left: 20, top: 1350, rot: -0.9 },
+            { layer: 'top', badge: 'New Music', title: 'Midnight Echoes Vinyl LP (2026 Mix)', sub: 'Single Release', type: 'vinyl', source: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/9bZkp7q19f0', styleClass: 'card-vinyl-standalone', height: 170, left: 390, top: 1420, rot: -2 },
+            { layer: 'top', badge: 'New Music', title: 'Ambient Design Flow Session', sub: 'Album Drop', type: 'vinyl', source: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/5qap5aO4i9A', styleClass: 'card-vinyl-standalone', height: 170, left: 20, top: 1820, rot: 1.5 },
+            { layer: 'top', badge: 'Behance', title: 'Interactive AI Tools Showcase', sub: 'Featured on Behance', type: 'image', source: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/L_LUpnjgPso', styleClass: 'card-instagram-style has-washi-tape', igUser: 'behance.design', height: 170, left: 390, top: 1820, rot: -1.2 },
+            { layer: 'top', badge: 'Dribbble', title: 'Next-Gen Mobile App Concept', sub: 'Popular on Dribbble', type: 'image', source: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/kJQP7kiw5Fk', styleClass: 'card-instagram-style', igUser: 'dribbble.shot', height: 150, left: 20, top: 2220, rot: 0.8 },
+            { layer: 'top', badge: 'TikTok', title: 'Micro-Interactions & Motion Design', sub: 'Trending Tech', type: 'video', source: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/9bZkp7q19f0', styleClass: 'card-tiktok-style has-washi-tape', overlayText: '🔥 #uimotion #figma', height: 170, left: 390, top: 2220, rot: 0.7 },
+            { layer: 'background', badge: 'Zine Print', title: 'Handmade Editorial Typography', sub: 'Print Zine', type: 'image', source: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/5qap5aO4i9A', styleClass: 'card-torn-edge has-washi-tape', height: 140, left: 20, top: 2620, rot: 1.4 },
+            { layer: 'background', badge: 'Paper Cut', title: 'Raw Editorial Cutouts & Collage', sub: 'Print Layout', type: 'image', source: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/L_LUpnjgPso', styleClass: 'card-torn-edge card-folded-corner', height: 130, left: 390, top: 2600, rot: -1.5 },
+            { layer: 'background', badge: 'Dribbble', title: '3D Spatial Interfaces Concept', sub: 'Dribbble Trending', type: 'image', source: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/kJQP7kiw5Fk', styleClass: 'card-torn-edge has-washi-tape tape-olive', height: 140, left: 20, top: 3000, rot: 0.9 },
+            { layer: 'background', badge: 'Behance', title: 'Neo-Brutalist Visual Identity', sub: 'Behance Curated', type: 'image', source: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80', videoUrl: 'https://www.youtube.com/embed/9bZkp7q19f0', styleClass: 'card-folded-corner has-washi-tape', height: 130, left: 390, top: 2980, rot: 1.2 }
+        ];
+
         const floatingLabels = [
             { text: '⚡ TIKTOK & YOUTUBE 2026', colorClass: '', top: 450, left: 200, rot: -2 },
             { text: '✦ VOGUE, FORBES & PINTEREST', colorClass: 'terracotta-bg', top: 150, left: 220, rot: 1.5 },
             { text: '📌 DESIGN TRENDS 2026', colorClass: 'yellow-bg', top: 1280, left: 240, rot: -1 }
         ];
 
-        // פונקציית טעינה דינמית ששולפת את הנתונים המעודכנים להיום באופן אוטומטי
-        async function buildArtisticCollage() {
-            const workspace = document.getElementById('collage-workspace');
+        function getDailyShuffledItems() {
+            const today = new Date();
+            const dateString = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
             
+            let seed = 0;
+            for (let i = 0; i < dateString.length; i++) {
+                seed += dateString.charCodeAt(i);
+            }
+
+            let shuffled = [...masterPool];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                seed = (seed * 9301 + 49297) % 233280;
+                const rnd = seed / 233280;
+                const j = Math.floor(rnd * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function buildArtisticCollage() {
+            const workspace = document.getElementById('collage-workspace');
+            workspace.innerHTML = ""; // ניקוי אזור העבודה
+
             const options = { month: 'short', day: 'numeric', year: 'numeric' };
             const formattedDate = new Date().toLocaleDateString('en-US', options);
             document.getElementById('live-date').innerText = formattedDate;
 
-            try {
-                // טעינת קובץ הנתונים החי
-                const response = await fetch('trends-data.json');
-                const masterPool = await response.json();
+            const todayItems = getDailyShuffledItems();
 
-                // אלגוריתם ערבוב יומי מבוסס תאריך אמיתי
-                const today = new Date();
-                const dateString = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
-                let seed = 0;
-                for (let i = 0; i < dateString.length; i++) {
-                    seed += dateString.charCodeAt(i);
-                }
+            todayItems.forEach((item) => {
+                const card = document.createElement('div');
+                const layerClass = item.layer === 'top' ? 'layer-top' : 'layer-background';
+                card.className = `collage-card ${item.styleClass} ${layerClass}`;
+                
+                card.style.top = `${item.top}px`;
+                card.style.left = `${item.left}px`;
+                card.style.transform = `rotate(${item.rot}deg)`;
 
-                let shuffled = [...masterPool];
-                for (let i = shuffled.length - 1; i > 0; i--) {
-                    seed = (seed * 9301 + 49297) % 233280;
-                    const rnd = seed / 233280;
-                    const j = Math.floor(rnd * (i + 1));
-                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-                }
+                card.onclick = () => {
+                    inspectItem(item.title, item.sub, item.videoUrl);
+                };
 
-                shuffled.forEach((item) => {
-                    const card = document.createElement('div');
-                    const layerClass = item.layer === 'top' ? 'layer-top' : 'layer-background';
-                    card.className = `collage-card ${item.styleClass} ${layerClass}`;
-                    
-                    card.style.top = `${item.top}px`;
-                    card.style.left = `${item.left}px`;
-                    card.style.transform = `rotate(${item.rot}deg)`;
+                let visualContent = '';
+                let extraHeader = '';
 
-                    card.onclick = () => {
-                        inspectItem(item.title, item.sub, item.videoUrl);
-                    };
-
-                    let visualContent = '';
-                    let extraHeader = '';
-
-                    if (item.magazineName) {
+                if (item.magazineName) {
                     extraHeader = `<div class="magazine-masthead">${item.magazineName}</div>`;
-                    } else if (item.styleClass.includes('card-instagram-style') && item.igUser) {
-                        extraHeader = `
-                            <div class="ig-header">
-                                <div class="ig-avatar"></div>
-                               <span>${item.igUser}</span>
-                            </div>
-                        `;
-                    }
+                } else if (item.styleClass.includes('card-instagram-style') && item.igUser) {
+                    extraHeader = `
+                        <div class="ig-header">
+                            <div class="ig-avatar"></div>
+                            <span>${item.igUser}</span>
+                        </div>
+                    `;
+                }
 
-                    if (item.type === 'video') {
-                        visualContent = `
-                            <div class="visual-box" style="height: ${item.height}px;">
-                                <span class="badge-title">${item.badge}</span>
-                                <iframe src="${item.videoUrl}" allow="autoplay"></iframe>
-                                ${item.overlayText ? `<div class="tiktok-overlay-tags">${item.overlayText}</div>` : ''}
-                            </div>
-                        `;
-                    } else if (item.type === 'vinyl') {
-                        visualContent = `
-                            <div class="vinyl-full-disc" style="background-image: url('${item.source}');">
-                                <div class="vinyl-center-hole"></div>
-                            </div>
-                        `;
-                    } else {
-                        visualContent = `
-                            <div class="visual-box" style="height: ${item.height}px; background-image: url('${item.source}');">
-                                <span class="badge-title">${item.badge}</span>
-                            </div>
-                        `;
-                    }
+                if (item.type === 'video') {
+                    visualContent = `
+                        <div class="visual-box" style="height: ${item.height}px;">
+                            <span class="badge-title">${item.badge}</span>
+                            <iframe src="${item.videoUrl}" allow="autoplay"></iframe>
+                            ${item.overlayText ? `<div class="tiktok-overlay-tags">${item.overlayText}</div>` : ''}
+                        </div>
+                    `;
+                } else if (item.type === 'vinyl') {
+                    visualContent = `
+                        <div class="vinyl-full-disc" style="background-image: url('${item.source}');">
+                            <div class="vinyl-center-hole"></div>
+                        </div>
+                    `;
+                } else {
+                    visualContent = `
+                        <div class="visual-box" style="height: ${item.height}px; background-image: url('${item.source}');">
+                            <span class="badge-title">${item.badge}</span>
+                        </div>
+                    `;
+                }
 
-                    if (item.type === 'vinyl') {
-                        card.innerHTML = `
-                            ${visualContent}
-                            <div style="text-align: center;"><div class="card-caption">${item.title}</div></div>
-                        `;
-                    } else {
-                        card.innerHTML = `
-                            ${extraHeader}
-                            ${visualContent}
-                            <div class="card-caption">${item.title}</div>
-                            <div class="card-sub">${item.sub}</div>
-                        `;
-                    }
+                if (item.type === 'vinyl') {
+                    card.innerHTML = `
+                        ${visualContent}
+                        <div style="text-align: center;"><div class="card-caption">${item.title}</div></div>
+                    `;
+                } else {
+                    card.innerHTML = `
+                        ${extraHeader}
+                        ${visualContent}
+                        <div class="card-caption">${item.title}</div>
+                        <div class="card-sub">${item.sub}</div>
+                    `;
+                }
 
-                    workspace.appendChild(card);
-                });
+                workspace.appendChild(card);
+            });
 
-                floatingLabels.forEach(label => {
-                    const tag = document.createElement('div');
-                    tag.className = `floating-label-tag ${label.colorClass}`;
-                    tag.style.top = `${label.top}px`;
-                    tag.style.left = `${label.left}px`;
-                    tag.style.transform = `rotate(${label.rot}deg)`;
-                    tag.innerText = label.text;
-                    workspace.appendChild(tag);
-                });
-
-            } catch (error) {
-                console.error("Error loading trends data:", error);
-            }
+            floatingLabels.forEach(label => {
+                const tag = document.createElement('div');
+                tag.className = `floating-label-tag ${label.colorClass}`;
+                tag.style.top = `${label.top}px`;
+                tag.style.left = `${label.left}px`;
+                tag.style.transform = `rotate(${label.rot}deg)`;
+                tag.innerText = label.text;
+                workspace.appendChild(tag);
+            });
         }
 
         function downloadMoodBoard() {
